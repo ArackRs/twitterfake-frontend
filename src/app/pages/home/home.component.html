@@ -1,0 +1,24 @@
+<div class="flex justify-content-between">
+  <app-sidebar />
+  <main class="flex gap-3 w-full">
+    <section class="home w-full pt-6">
+      <div class="container">
+        <app-create-post />
+        <h1>Welcome to the Home Page</h1>
+        <div class="card">
+          <p-tabView>
+            <p-tabPanel header="For you">
+              <app-post />
+            </p-tabPanel>
+            <p-tabPanel header="Following">
+              <ng-template pTemplate="content"> Complex Content to Lazy Loads </ng-template>
+            </p-tabPanel>
+          </p-tabView>
+        </div>
+      </div>
+    </section>
+    <aside class="pt-6">
+      <app-follow />
+    </aside>
+  </main>
+</div>

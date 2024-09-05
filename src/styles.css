@@ -1,1 +1,22 @@
-/* You can add global styles to this file, and also import other style files */
+@import "primeng/resources/themes/aura-dark-blue/theme.css";
+@import "primeng/resources/primeng.css";
+@import "primeicons/primeicons.css";
+@import "primeflex/primeflex.css";
+
+* {
+  /*background-color: rgba(129, 129, 129, 0.41);*/
+}
+
+body {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding-inline: min(5%, 1rem);
+}
+
+.p-button {
+  width: max-content;
+}
+.public .p-button {
+  width: 100%;
+}
