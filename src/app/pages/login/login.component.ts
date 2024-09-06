@@ -26,14 +26,12 @@ export class LoginComponent {
     private formBuilder: FormBuilder,
     private router: Router
   ) {
-    // Inicializa el formulario reactivo
     this.loginForm = this.formBuilder.group({
       username: ['', Validators.required],
       password: ['', Validators.required]
     });
   }
 
-  // Método para manejar el inicio de sesión
   onSubmit() {
     if (this.loginForm.valid) {
       const credentials = {
@@ -41,11 +39,11 @@ export class LoginComponent {
         password: this.loginForm.value.password
       };
 
-      // Llamada al método signIn del servicio AuthService
       this.authService.signIn(credentials).subscribe({
         next: (response) => {
+          localStorage.setItem('token', response.token);
+          console.log(localStorage.getItem('token'));
           console.log('Inicio de sesión exitoso', response);
-          // Redirigir al usuario a una página después de iniciar sesión, como el dashboard
           this.router.navigate(['/home']);
         },
         error: (error) => {

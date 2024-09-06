@@ -1,36 +1,34 @@
-import { Injectable } from '@angular/core';
-import {
-  HttpEvent,
-  HttpInterceptor,
-  HttpHandler,
-  HttpRequest,
-  HttpErrorResponse
-} from '@angular/common/http';
+import {HttpEvent, HttpRequest, HttpHandlerFn, HttpErrorResponse, HttpResponse} from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { catchError, tap } from 'rxjs/operators';
+import { inject } from '@angular/core';
+import { AuthService } from './auth.service';
 
-@Injectable()
-export class AuthInterceptor implements HttpInterceptor {
+export function authInterceptor(req: HttpRequest<any>, next: HttpHandlerFn): Observable<HttpEvent<any>> {
+  const authService = inject(AuthService);
+  const token = authService.getAuthToken();
 
-  intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    const token = localStorage.getItem('token');
-    let authReq = req;
+  const authReq = token ? req.clone({
+    headers: req.headers.set('Authorization', `Bearer ${token}`)
+  }) : req;
 
-    if (token) {
-      authReq = req.clone({
-        headers: req.headers.set('Authorization', `Bearer ${token}`)
-      });
-    }
-
-    return next.handle(authReq).pipe(
-      catchError((error: HttpErrorResponse) => {
-        if (error.status === 403) {
-          localStorage.removeItem('token');
-          alert('Session has expired. You will be redirected to the login page.');
-          window.location.href = 'sign-in';
-        }
-        return throwError(() => new Error('Something happened with the request, please try again later.'));
-      })
-    );
-  }
+  return next(authReq).pipe(
+    tap(event => {
+      // Opcional: Puedes realizar acciones adicionales aquí
+      // if (event instanceof HttpResponse) {
+      //   const newToken = event.headers.get('Authorization');
+      //   if (newToken) {
+      //     localStorage.setItem('token', newToken);
+      //   }
+      // }
+    }),
+    catchError((error: HttpErrorResponse) => {
+      if (error.status === 403) {
+        localStorage.removeItem('token');
+        alert('Session has expired. You will be redirected to the login page.');
+        window.location.href = 'public';
+      }
+      return throwError(() => new Error('Something happened with the request, please try again later.'));
+    })
+  );
 }

@@ -1,8 +1,9 @@
 <div class="card w-full">
-  <p-iconField class="" iconPosition="left">
-    <p-inputIcon styleClass="pi pi-user" />
-    <input class="w-full p-5 mb-3" type="text" pInputText placeholder="What is happening?!" />
-  </p-iconField>
-  <p-button class="px-3" label="Post" severity="primary" [rounded]="true" />
-  <p-divider />
+  <form [formGroup]="postForm" (ngSubmit)="onSubmit()">
+    <p-iconField class="" iconPosition="left">
+      <input class="w-full py-5 px-3 mb-3" type="text" pInputText placeholder="What is happening?" formControlName="content" />
+    </p-iconField>
+    <p-button class="btn-post px-3" label="Post" severity="primary" [rounded]="true" type="submit" />
+    <p-divider></p-divider>
+  </form>
 </div>

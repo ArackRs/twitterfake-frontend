@@ -1,1 +1,63 @@
-<p>profile works!</p>
+<div class="flex justify-content-between">
+  <app-sidebar></app-sidebar>
+  <main class="flex gap-3 w-full">
+    <section class="profile w-full pt-6">
+      <div class="container">
+        <div class="profile-header p-3">
+          <div class="profile-avatar">
+            <img alt="Profile Avatar" src="https://via.placeholder.com/150" />
+          </div>
+          <div class="profile-info">
+            <h1>{{ user.firstName + " " + user.lastName }}</h1>
+            <p class="pb-3">{{ "@" + user.username }}</p>
+            <p-button class="edit-profile-button" label="Edit Profile" />
+          </div>
+        </div>
+        <div class="card">
+          <p-tabView>
+            <p-tabPanel header="Posts">
+              <app-post></app-post>
+            </p-tabPanel>
+            <p-tabPanel header="Following">
+              <ng-template pTemplate="content">
+                <div class="follow-list">
+                  @for (user of following; track user.id) {
+                    <div class="follow-item">
+                      <p-avatar label="U" styleClass="mr-2" size="xlarge" shape="circle"></p-avatar>
+                      <div class="follow-info">
+                        <b>{{ user.firstName + "" + user.lastName }}</b>
+                        <p class="follow-username">{{ user.username }}</p>
+                      </div>
+                    </div>
+                  } @empty {
+                    <p>No following users.</p>
+                  }
+                </div>
+              </ng-template>
+            </p-tabPanel>
+            <p-tabPanel header="Followers">
+              <ng-template pTemplate="content">
+                <div class="follow-list">
+                  @for (user of followers; track user.id) {
+                    <div class="follow-item">
+                      <p-avatar label="U" styleClass="mr-2" size="xlarge" shape="circle"></p-avatar>
+                      <div class="follow-info">
+                        <b>{{ user.firstName + "" + user.lastName }}</b>
+                        <p class="follow-username">{{ user.username }}</p>
+                      </div>
+                    </div>
+                  } @empty {
+                    <p>No followers yet.</p>
+                  }
+                </div>
+              </ng-template>
+            </p-tabPanel>
+          </p-tabView>
+        </div>
+      </div>
+    </section>
+    <aside class="pt-6">
+      <app-follow></app-follow>
+    </aside>
+  </main>
+</div>

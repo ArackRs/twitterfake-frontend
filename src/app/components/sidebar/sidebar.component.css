@@ -1,4 +1,13 @@
-
+.sidebar {
+  position: static;
+  width: 30%;
+}
 .sidebar__content .p-button {
   width: min-content;
 }
+@media (max-width: 425px) {
+  h1 {
+    display: none;
+  }
+}
+

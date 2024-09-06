@@ -2,12 +2,12 @@ import { Routes } from '@angular/router';
 
 export const routes: Routes = [
   {
-    path: '',
-    redirectTo: '/public',
+    path: 'public',
+    redirectTo: '/',
     pathMatch: 'full'
   },
   {
-    path: 'public',
+    path: '',
     loadComponent: () => import('./pages/public/public.component').then(m => m.PublicComponent)
   },
   {

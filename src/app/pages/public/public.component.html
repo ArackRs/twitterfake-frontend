@@ -1,17 +1,15 @@
 <main class="w-full h-screen grid align-content-center">
-  <section class="public w-full flex justify-content-between align-content-center">
-    <div>
-      <img src="assets/images/hero.png" alt="Hero">
-    </div>
-    <div class="right w-20rem">
-      <h1>Lo que está pasando ahora</h1>
+  <section class="public w-full flex justify-content-between align-items-center">
+    <div class="card w-20rem">
+      <h1 class="text-6xl">Lo que está pasando ahora</h1>
       <h2>Únete Hoy</h2>
-      <p-button routerLink="/register" label="Crear Cuenta" severity="contrast" />
-      <p-divider />
-      <p-button routerLink="/login" label="Iniciar Sesion" />
-      <p-divider />
+      <p-button routerLink="/register" label="Crear Cuenta" severity="contrast"></p-button>
+      <p-divider></p-divider>
+      <p-button routerLink="/login" label="Iniciar Sesion"></p-button>
+      <p-divider></p-divider>
       <p>¿Aun no tienes una Cuenta?</p>
-      <p-button routerLink="/home" label="Invitado" [outlined]="true" />
+      <p-button label="Invitado" (click)="createGuestAccount()" [outlined]="true"></p-button>
+      <app-footer></app-footer>
     </div>
   </section>
 </main>

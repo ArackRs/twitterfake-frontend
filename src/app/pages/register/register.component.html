@@ -1,6 +1,7 @@
 <div class="auth flex justify-content-center align-items-center">
-  <div class="container flex flex-column p-5 gap-4" style="border-radius: 12px; background-image: radial-gradient(circle at left top, var(--primary-400), var(--primary-700))">
-    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+  <div class="container flex flex-column p-5 gap-4">
+    <h1 class="text-primary-50 font-bold text-center">Crear Cuenta</h1>
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="flex flex-column gap-3">
       <div class="inline-flex flex-column gap-2">
         <label for="firstname" class="text-primary-50 font-semibold">First Name</label>
         <input pInputText id="firstname" formControlName="firstname" class="bg-white-alpha-20 border-none p-3 text-primary-50"/>

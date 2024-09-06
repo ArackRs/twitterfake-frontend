@@ -34,21 +34,18 @@ export class RegisterComponent {
     });
   }
 
-  // Método para manejar el registro de usuario
   onSubmit() {
     if (this.registerForm.valid) {
       const user = {
-        firstname: this.registerForm.value.firstname,
-        lastname: this.registerForm.value.lastname,
+        firstName: this.registerForm.value.firstname,
+        lastName: this.registerForm.value.lastname,
         username: this.registerForm.value.username,
         password: this.registerForm.value.password
       };
 
-      // Llamada al método signUp del servicio AuthService
       this.authService.signUp(user).subscribe({
         next: (response) => {
           console.log('Usuario registrado con éxito', response);
-          // Redirigir a la página de inicio de sesión o donde desees
           this.router.navigate(['/login']);
         },
         error: (error) => {

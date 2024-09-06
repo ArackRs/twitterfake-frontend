@@ -5,16 +5,12 @@ import { Component } from '@angular/core';
   standalone: true,
   imports: [],
   template: `
-    <p>
-      footer works!
-    </p>
+    <p>Developed by Jack Arana R.</p>
   `,
   styles: `
     p {
-      text-align: center;
-      background-color: #333;
-      color: white;
-      padding: 10px;
+      font-size: .6em;
+      color: #f8f6f6;
       width: 100%;
     }
   `

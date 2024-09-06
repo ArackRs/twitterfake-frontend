@@ -1,13 +1,20 @@
-<div class="follow p-3">
+<div class="follow w-20rem p-3">
   <div class="container">
     <h1 class="follow__title">Who to Follow</h1>
-    <div class="flex align-items-center gap-3">
-      <p-image src="" width="50" height="50" />
-      <div>
-        <b>Name</b>
-        <p class="my-0">Username</p>
+    @for (user of users; track user.id) {
+      <div class="flex justify-content-between align-items-center gap-3 mb-3">
+        <div class="flex align-items-center gap-2">
+          <p-avatar label="U" styleClass="mr-2" size="large" shape="circle" />
+          <div class="box">
+            <b>{{ user.firstName + " " + user.lastName }}</b>
+            <p class="my-0">{{ "@" + user.username }}</p>
+          </div>
+        </div>
+        <p-button label="Follow" icon="pi pi-plus" severity="contrast" [rounded]="true" (click)="followUser(user.id)"></p-button>
       </div>
-      <p-button label="Follow" severity="contrast" [rounded]="true" />
-    </div>
+    } @empty {
+      <p>No users to follow.</p>
+    }
   </div>
 </div>
+

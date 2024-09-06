@@ -4,19 +4,52 @@
 @import "primeflex/primeflex.css";
 
 * {
-  /*background-color: rgba(129, 129, 129, 0.41);*/
+  box-sizing: border-box;
 }
 
 body {
   width: 100%;
   max-width: 1200px;
+  height: 100vh;
   margin: 0 auto;
   padding-inline: min(5%, 1rem);
+  background: linear-gradient(120deg, rgba(16, 87, 150, 0.32), rgba(0, 0, 0, 0.91));
 }
 
-.p-button {
-  width: max-content;
+section {
+  height: 100vh;
+  position: relative;
+  overflow-y: scroll;
+  &::-webkit-scrollbar {
+    width: 0;
+  }
 }
+img {
+  max-width: 100%;
+}
+
 .public .p-button {
   width: 100%;
+}
+.p-tabview .p-tabview-panels {
+  background: transparent;
+}
+.p-tabview .p-tabview-nav {
+  background: transparent;
+}
+.p-tabview-nav-link {
+  background: transparent;
+}
+.btn-post {
+  float: right;
+  margin-bottom: 1rem;
+}
+
+@media (max-width: 425px) {
+  body {
+    padding-inline: 0;
+  }
+  .sidebar .p-button .p-button-label {
+    display: none;
+  }
 }

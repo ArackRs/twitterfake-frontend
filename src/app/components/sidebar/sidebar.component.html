@@ -1,11 +1,12 @@
-<nav class="sidebar w-15rem h-screen p-2">
+<nav class="sidebar h-screen pt-3 pr-3">
   <div class="container">
-    <div class="sidebar__header">
+    <div class="sidebar__header pb-3">
       <h1 class="sidebar__title" [routerLink]="['/']">Enlace</h1>
     </div>
-    <div class="sidebar__content flex flex-column gap-1">
-      <p-button [routerLink]="['/home']" label="Home" icon="pi pi-home" severity="contrast" [text]="true" [rounded]="true" />
-      <p-button [routerLink]="['/profile']" label="Profile" icon="pi pi-user" severity="contrast" [text]="true" [rounded]="true" />
+    <div class="sidebar__content flex flex-column gap-3">
+      <p-button [routerLink]="['/home']" label="Home" icon="pi pi-home" severity="contrast" [rounded]="true" />
+      <p-button [routerLink]="['/profile']" label="Profile" icon="pi pi-user" severity="contrast" [rounded]="true" />
+      <p-button label="Logout" icon="pi pi-sign-out" severity="danger" [rounded]="true" (click)="logout()" />
     </div>
   </div>
 </nav>

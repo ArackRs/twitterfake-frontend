@@ -5,3 +5,7 @@ input {
   background: transparent;
 }
 
+button {
+  position: relative;
+  right: 0;
+}
