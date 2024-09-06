@@ -1,3 +1,3 @@
 export const environment = {
-  serverBasePath: undefined
+  serverBasePath: 'https://tdenlace-fhefasf4gvb3acgq.eastus-01.azurewebsites.net/api/v1'
 };

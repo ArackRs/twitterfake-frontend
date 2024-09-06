@@ -13,8 +13,13 @@ export class AuthService extends ApiBaseService<any> {
     this.resourceEndpoint = '/auth';
   }
 
+  // signUp(item: any): Observable<any> {
+  //   return this.http.post(`${this.resourcePath()}/register`, JSON.stringify(item), {...this.httpOptions, responseType: 'text'})
+  //     .pipe(retry(2), catchError(this.handleError));
+  // }
+
   signUp(item: any): Observable<any> {
-    return this.http.post<any>(`${this.resourcePath()}/register`, JSON.stringify(item), this.httpOptions)
+    return this.http.post(`${this.resourcePath()}/register`, JSON.stringify(item), {...this.httpOptions, responseType: 'text'})
       .pipe(retry(2), catchError(this.handleError));
   }
 

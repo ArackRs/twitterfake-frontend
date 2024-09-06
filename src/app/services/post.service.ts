@@ -9,6 +9,6 @@ export class PostService extends ApiBaseService<any> {
 
   constructor(http: HttpClient) {
     super(http);
-    this.resourceEndpoint='/posts'
+    this.resourceEndpoint='/post'
   }
 }

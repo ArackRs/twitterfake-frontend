@@ -14,12 +14,8 @@ export function authInterceptor(req: HttpRequest<any>, next: HttpHandlerFn): Obs
 
   return next(authReq).pipe(
     tap(event => {
-      // Opcional: Puedes realizar acciones adicionales aquí
       // if (event instanceof HttpResponse) {
-      //   const newToken = event.headers.get('Authorization');
-      //   if (newToken) {
-      //     localStorage.setItem('token', newToken);
-      //   }
+      //   console.log('Interceptor event:', event);
       // }
     }),
     catchError((error: HttpErrorResponse) => {

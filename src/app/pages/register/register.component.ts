@@ -5,6 +5,7 @@ import { Button } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { RouterLink } from '@angular/router';
 import { AuthService } from "../../services/auth.service";
+import {User} from "../../model/user";
 
 @Component({
   selector: 'app-register',
@@ -20,7 +21,7 @@ import { AuthService } from "../../services/auth.service";
 })
 export class RegisterComponent {
   registerForm: FormGroup;
-
+  user: User = new User();
   constructor(
     private authService: AuthService,
     private formBuilder: FormBuilder,
@@ -30,20 +31,19 @@ export class RegisterComponent {
       firstname: ['', Validators.required],
       lastname: ['', Validators.required],
       username: ['', Validators.required],
-      password: ['', [Validators.required, Validators.minLength(6)]]
+      password: ['', Validators.required]
     });
   }
 
   onSubmit() {
     if (this.registerForm.valid) {
-      const user = {
-        firstName: this.registerForm.value.firstname,
-        lastName: this.registerForm.value.lastname,
-        username: this.registerForm.value.username,
-        password: this.registerForm.value.password
-      };
+      this.user.firstName = this.registerForm.value.firstname;
+      this.user.lastName = this.registerForm.value.lastname;
+      this.user.username = this.registerForm.value.username;
+      this.user.password = this.registerForm.value.password;
 
-      this.authService.signUp(user).subscribe({
+      console.log('Usuario a registrar:', this.user);
+      this.authService.signUp(this.user).subscribe({
         next: (response) => {
           console.log('Usuario registrado con éxito', response);
           this.router.navigate(['/login']);

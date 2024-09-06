@@ -1,0 +1,28 @@
+<div class="follow-list">
+  @for (user of following; track user.id) {
+    <div class="follow-item flex justify-content-between align-items-center">
+      <div class="flex align-items-center gap-2">
+        <p-avatar label="U" styleClass="mr-2" size="xlarge" shape="circle"></p-avatar>
+        <div class="follow-info">
+          <b>{{ user.firstName + " " + user.lastName }}</b>
+          <p class="follow-username">{{ user.username }}</p>
+        </div>
+      </div>
+      <p-button
+        label="Unfollow"
+        icon="pi pi-user-minus"
+        severity="danger"
+        [outlined]="true"
+        [rounded]="true"
+        (click)="unFollowUser(user.id)"
+        [disabled]="loading[user.id]"
+      >
+      <ng-template pTemplate="icon">
+        <i class="pi" [ngClass]="loading[user.id] ? 'pi-spin pi-spinner' : 'pi-user-minus'"></i>
+      </ng-template>
+      </p-button>
+    </div>
+  } @empty {
+    <p>No following users.</p>
+  }
+</div>

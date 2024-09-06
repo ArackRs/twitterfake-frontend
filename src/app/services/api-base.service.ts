@@ -14,7 +14,7 @@ export class ApiBaseService<T> {
   httpOptions = {
     headers: new HttpHeaders({
       'Content-Type': 'application/json',
-      // 'Authorization': `Bearer ${localStorage.getItem('token')}`
+      'Authorization': `Bearer ${localStorage.getItem('token')}`
     })
   }
 
@@ -38,18 +38,13 @@ export class ApiBaseService<T> {
       .pipe(retry(2), catchError(this.handleError));
   }
 
-  createById(id: any, item: any): Observable<T> {
-    return this.http.post<T>(`${this.resourcePath()}/${id}`, JSON.stringify(item), this.httpOptions)
+  delete(): Observable<void> {
+    return this.http.delete<void>(`${this.resourcePath()}`, this.httpOptions)
       .pipe(retry(2), catchError(this.handleError));
   }
 
-  delete(id: any): Observable<void> {
-    return this.http.delete<void>(`${this.resourcePath()}/${id}`, this.httpOptions)
-      .pipe(retry(2), catchError(this.handleError));
-  }
-
-  update(id: any, item: any): Observable<T> {
-    return this.http.put<T>(`${this.resourcePath()}/${id}`, JSON.stringify(item), this.httpOptions)
+  update(item: any): Observable<string> {
+    return this.http.put(`${this.resourcePath()}`, JSON.stringify(item), { ...this.httpOptions, responseType: 'text' })
       .pipe(retry(2), catchError(this.handleError));
   }
 
@@ -58,8 +53,8 @@ export class ApiBaseService<T> {
       .pipe(retry(2), catchError(this.handleError));
   }
 
-  getId(id: any): Observable<T> {
-    return this.http.get<T>(`${this.resourcePath()}/${id}`, this.httpOptions)
+  getById(): Observable<T> {
+    return this.http.get<T>(`${this.resourcePath()}`, this.httpOptions)
       .pipe(retry(2), catchError(this.handleError));
   }
 }

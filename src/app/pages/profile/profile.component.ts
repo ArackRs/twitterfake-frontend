@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnChanges, OnInit} from '@angular/core';
 import {CreatePostComponent} from "../../components/create-post/create-post.component";
 import {FollowComponent} from "../../components/follow/follow.component";
 import {PostComponent} from "../../components/post/post.component";
@@ -6,9 +6,14 @@ import {PrimeTemplate} from "primeng/api";
 import {SidebarComponent} from "../../components/sidebar/sidebar.component";
 import {TabViewModule} from "primeng/tabview";
 import {UserService} from "../../services/user.service";
-import {FollowService} from "../../services/follow.service";
 import {Button} from "primeng/button";
 import {AvatarModule} from "primeng/avatar";
+import {NgIf} from "@angular/common";
+import {FollowingComponent} from "../../components/following/following.component";
+import {FollowersComponent} from "../../components/followers/followers.component";
+import {DialogModule} from "primeng/dialog";
+import {FormsModule} from "@angular/forms";
+import {InputTextModule} from "primeng/inputtext";
 
 @Component({
   selector: 'app-profile',
@@ -21,7 +26,13 @@ import {AvatarModule} from "primeng/avatar";
     SidebarComponent,
     TabViewModule,
     Button,
-    AvatarModule
+    AvatarModule,
+    NgIf,
+    FollowingComponent,
+    FollowersComponent,
+    DialogModule,
+    FormsModule,
+    InputTextModule
   ],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.css'
@@ -29,39 +40,51 @@ import {AvatarModule} from "primeng/avatar";
 export class ProfileComponent implements OnInit {
   user: any = {};
   following: any[] = [];
-  followers: any[] = [];
-  username: string = 'string';
-  userId: number = 1;
+  visible: boolean = false;
+  firstName: string = '';
+  lastName: string = '';
 
-  constructor(
-    private userService: UserService,
-    private followService: FollowService
-  ) {}
+  constructor(private userService: UserService) {}
 
   ngOnInit(): void {
     this.loadUserProfile();
-    this.loadFollowing();
-    this.loadFollowers();
   }
 
-  loadUserProfile(): void {
-    this.userService.getByUsername(this.username).subscribe({
-      next: (data) => this.user = data,
-      error: (err) => console.error('Error fetching user profile', err)
+  private loadUserProfile(): void {
+
+    this.userService.getUserByUsername(this.userService.getUsername()).subscribe({
+      next: (user) => {
+        this.user = user;
+      },
+      error: (err) => {
+        console.error('Error fetching current user:', err);
+      }
     });
   }
 
-  loadFollowing(): void {
-    this.followService.getFollowing(this.userId).subscribe({
-      next: (data) => this.following = data,
-      error: (err) => console.error('Error fetching following', err)
-    });
+  public saveProfile(): void {
+    const updatedUser = {
+      firstName: this.firstName,
+      lastName: this.lastName,
+    };
+
+    this.userService.update(updatedUser).subscribe(
+      response => {
+        console.log('Profile updated successfully', response);
+        this.hideDialog();
+        this.loadUserProfile();
+      },
+      error => {
+        console.error('Error updating profile', error);
+      }
+    );
   }
 
-  loadFollowers(): void {
-    this.followService.getFollowers(this.userId).subscribe({
-      next: (data) => this.followers = data,
-      error: (err) => console.error('Error fetching followers', err)
-    });
+  public showDialog(): void {
+    this.visible = true;
+  }
+
+  public hideDialog(): void {
+    this.visible = false;
   }
 }

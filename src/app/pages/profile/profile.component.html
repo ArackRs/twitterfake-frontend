@@ -10,7 +10,22 @@
           <div class="profile-info">
             <h1>{{ user.firstName + " " + user.lastName }}</h1>
             <p class="pb-3">{{ "@" + user.username }}</p>
-            <p-button class="edit-profile-button" label="Edit Profile" />
+            <p-button class="edit-profile-button" (click)="showDialog()" label="Edit Profile" />
+            <p-dialog header="Edit Profile" [modal]="true" [(visible)]="visible" [style]="{ width: '25rem' }">
+              <span class="p-text-secondary block mb-5">Update your information.</span>
+              <div class="flex align-items-center gap-3 mb-3">
+                <label for="firstname" class="font-semibold w-6rem">First Name</label>
+                <input pInputText id="firstname" [(ngModel)]="firstName" autocomplete="off" />
+              </div>
+              <div class="flex align-items-center gap-3 mb-3">
+                <label for="lastname" class="font-semibold w-6rem">Last Name</label>
+                <input pInputText id="lastname" [(ngModel)]="lastName" autocomplete="off" />
+              </div>
+              <div class="flex justify-content-end gap-2">
+                <p-button label="Cancel" severity="secondary" (click)="hideDialog()" />
+                <p-button label="Save" (click)="saveProfile()" />
+              </div>
+            </p-dialog>
           </div>
         </div>
         <div class="card">
@@ -19,38 +34,10 @@
               <app-post></app-post>
             </p-tabPanel>
             <p-tabPanel header="Following">
-              <ng-template pTemplate="content">
-                <div class="follow-list">
-                  @for (user of following; track user.id) {
-                    <div class="follow-item">
-                      <p-avatar label="U" styleClass="mr-2" size="xlarge" shape="circle"></p-avatar>
-                      <div class="follow-info">
-                        <b>{{ user.firstName + "" + user.lastName }}</b>
-                        <p class="follow-username">{{ user.username }}</p>
-                      </div>
-                    </div>
-                  } @empty {
-                    <p>No following users.</p>
-                  }
-                </div>
-              </ng-template>
+              <app-following />
             </p-tabPanel>
             <p-tabPanel header="Followers">
-              <ng-template pTemplate="content">
-                <div class="follow-list">
-                  @for (user of followers; track user.id) {
-                    <div class="follow-item">
-                      <p-avatar label="U" styleClass="mr-2" size="xlarge" shape="circle"></p-avatar>
-                      <div class="follow-info">
-                        <b>{{ user.firstName + "" + user.lastName }}</b>
-                        <p class="follow-username">{{ user.username }}</p>
-                      </div>
-                    </div>
-                  } @empty {
-                    <p>No followers yet.</p>
-                  }
-                </div>
-              </ng-template>
+              <app-followers />
             </p-tabPanel>
           </p-tabView>
         </div>

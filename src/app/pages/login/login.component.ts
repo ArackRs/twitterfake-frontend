@@ -42,6 +42,7 @@ export class LoginComponent {
       this.authService.signIn(credentials).subscribe({
         next: (response) => {
           localStorage.setItem('token', response.token);
+          localStorage.setItem('username', response.username);
           console.log(localStorage.getItem('token'));
           console.log('Inicio de sesión exitoso', response);
           this.router.navigate(['/home']);

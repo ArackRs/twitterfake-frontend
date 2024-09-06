@@ -10,7 +10,18 @@
             <p class="my-0">{{ "@" + user.username }}</p>
           </div>
         </div>
-        <p-button label="Follow" icon="pi pi-plus" severity="contrast" [rounded]="true" (click)="followUser(user.id)"></p-button>
+        <p-button
+          label="Follow"
+          icon="pi pi-plus"
+          severity="contrast"
+          [rounded]="true"
+          (click)="followUser(user.id)"
+          [disabled]="loadingUsers[user.id]">
+          <ng-template pTemplate="icon">
+            <i *ngIf="loadingUsers[user.id]" class="pi pi-spin pi-spinner"></i>
+            <i *ngIf="!loadingUsers[user.id]" class="pi pi-plus"></i>
+          </ng-template>
+        </p-button>
       </div>
     } @empty {
       <p>No users to follow.</p>

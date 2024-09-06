@@ -32,9 +32,7 @@ export class PostsOfFollowingComponent implements OnInit {
   }
 
   loadFollowingAndPosts() {
-    const userId = this.getCurrentUserId();
-
-    this.followService.getFollowing(userId).subscribe({
+    this.followService.getFollowing().subscribe({
       next: (followingList) => {
         this.following = followingList;
         this.getPostsFromFollowing();
@@ -63,8 +61,8 @@ export class PostsOfFollowingComponent implements OnInit {
     return 1
   }
 
-  deletePost(postId: number) {
-    this.postService.delete(postId).subscribe({
+  deletePost() {
+    this.postService.delete().subscribe({
       next: () => {
         console.log('Post deleted successfully');
         this.getPostsFromFollowing();

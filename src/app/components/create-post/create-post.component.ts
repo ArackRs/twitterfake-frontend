@@ -23,7 +23,6 @@ import {PostService} from "../../services/post.service";
 })
 export class CreatePostComponent {
   postForm: FormGroup;
-  postId: string = '1';
 
   constructor(private postService: PostService, private fb: FormBuilder) {
     this.postForm = this.fb.group({
@@ -33,14 +32,12 @@ export class CreatePostComponent {
 
   onSubmit(): void {
     if (this.postForm.valid) {
-      this.postService.createById(this.postId, this.postForm.value).subscribe({
+      this.postService.create(this.postForm.value).subscribe({
         next: (response) => {
           console.log('Post created successfully:', response);
-          // Puedes redirigir o mostrar un mensaje de éxito aquí
         },
         error: (error) => {
           console.error('Error creating post:', error);
-          // Manejo del error aquí
         }
       });
     }
