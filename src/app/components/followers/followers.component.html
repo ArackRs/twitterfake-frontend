@@ -8,20 +8,15 @@
           <p class="follow-username">{{ user.username }}</p>
         </div>
       </div>
-      <ng-container *ngIf="!user.isFollowing">
-        <p-button
-          label="Follow"
-          icon="pi pi-user-plus"
-          severity="primary"
-          [outlined]="true"
-          [rounded]="true"
-          (click)="followUser(user.id)"
-          [disabled]="loading[user.id]"
-        />
-        <ng-template pTemplate="icon">
-          <i class="pi" [ngClass]="loading[user.id] ? 'pi-spin pi-spinner' : 'pi-user-plus'"></i>
-        </ng-template>
-      </ng-container>
+      <p-button
+        label="Follow"
+        [icon]="loading[user.id] ? 'pi pi-spin pi-spinner' : 'pi pi-user-plus'"
+        severity="primary"
+        [outlined]="true"
+        [rounded]="true"
+        (click)="followUser(user.id)"
+        [disabled]="loading[user.id]"
+      />
     </div>
   } @empty {
     <p>No followers yet.</p>

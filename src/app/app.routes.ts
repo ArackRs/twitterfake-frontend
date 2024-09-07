@@ -1,14 +1,15 @@
 import { Routes } from '@angular/router';
+import {authGuard} from "./auth.guard";
 
 export const routes: Routes = [
   {
-    path: 'public',
-    redirectTo: '/',
+    path: '',
+    redirectTo: '/landing',
     pathMatch: 'full'
   },
   {
-    path: '',
-    loadComponent: () => import('./pages/public/public.component').then(m => m.PublicComponent)
+    path: 'landing',
+    loadComponent: () => import('./pages/landing/landing.component').then(m => m.LandingComponent)
   },
   {
     path: 'register',
@@ -20,11 +21,13 @@ export const routes: Routes = [
   },
   {
     path: 'home',
-    loadComponent: () => import('./pages/home/home.component').then(m => m.HomeComponent)
+    loadComponent: () => import('./pages/home/home.component').then(m => m.HomeComponent),
+    canActivate: [authGuard]
   },
   {
     path: 'profile',
-    loadComponent: () => import('./pages/profile/profile.component').then(m => m.ProfileComponent)
+    loadComponent: () => import('./pages/profile/profile.component').then(m => m.ProfileComponent),
+    canActivate: [authGuard]
   },
   {
     path: '**',

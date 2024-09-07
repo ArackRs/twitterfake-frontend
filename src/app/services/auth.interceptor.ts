@@ -14,15 +14,13 @@ export function authInterceptor(req: HttpRequest<any>, next: HttpHandlerFn): Obs
 
   return next(authReq).pipe(
     tap(event => {
-      // if (event instanceof HttpResponse) {
-      //   console.log('Interceptor event:', event);
-      // }
     }),
     catchError((error: HttpErrorResponse) => {
       if (error.status === 403) {
         localStorage.removeItem('token');
+        localStorage.removeItem('username');
         alert('Session has expired. You will be redirected to the login page.');
-        window.location.href = 'public';
+        window.location.href = '/landing';
       }
       return throwError(() => new Error('Something happened with the request, please try again later.'));
     })

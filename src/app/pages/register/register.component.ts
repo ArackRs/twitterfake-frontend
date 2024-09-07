@@ -22,6 +22,7 @@ import {User} from "../../model/user";
 export class RegisterComponent {
   registerForm: FormGroup;
   user: User = new User();
+
   constructor(
     private authService: AuthService,
     private formBuilder: FormBuilder,
@@ -35,7 +36,7 @@ export class RegisterComponent {
     });
   }
 
-  onSubmit() {
+  public onSubmit(): void {
     if (this.registerForm.valid) {
       this.user.firstName = this.registerForm.value.firstname;
       this.user.lastName = this.registerForm.value.lastname;

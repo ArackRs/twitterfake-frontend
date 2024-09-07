@@ -1,4 +1,4 @@
-import {Component, OnChanges, OnInit} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {CreatePostComponent} from "../../components/create-post/create-post.component";
 import {FollowComponent} from "../../components/follow/follow.component";
 import {PostComponent} from "../../components/post/post.component";
@@ -44,24 +44,11 @@ export class ProfileComponent implements OnInit {
   firstName: string = '';
   lastName: string = '';
 
-  constructor(private userService: UserService) {}
+  constructor(private userService: UserService) {  }
 
-  ngOnInit(): void {
+  public ngOnInit(): void {
     this.loadUserProfile();
   }
-
-  private loadUserProfile(): void {
-
-    this.userService.getUserByUsername(this.userService.getUsername()).subscribe({
-      next: (user) => {
-        this.user = user;
-      },
-      error: (err) => {
-        console.error('Error fetching current user:', err);
-      }
-    });
-  }
-
   public saveProfile(): void {
     const updatedUser = {
       firstName: this.firstName,
@@ -79,12 +66,21 @@ export class ProfileComponent implements OnInit {
       }
     );
   }
-
   public showDialog(): void {
     this.visible = true;
   }
-
   public hideDialog(): void {
     this.visible = false;
+  }
+
+  private loadUserProfile(): void {
+    this.userService.getUserByUsername(this.userService.getUsername()).subscribe({
+      next: (user) => {
+        this.user = user;
+      },
+      error: (err) => {
+        console.error('Error fetching current user:', err);
+      }
+    });
   }
 }

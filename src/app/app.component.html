@@ -1,1 +1,16 @@
-<router-outlet />
+@if (isAuthenticated()) {
+  <div id="app" class="flex justify-content-between">
+    <app-sidebar />
+    <main class="flex lg:gap-3 w-full">
+      <section class=" w-full pt-6">
+        <router-outlet />
+      </section>
+      <aside class="pt-6">
+        <app-follow />
+      </aside>
+    </main>
+  </div>
+}
+@else {
+  <router-outlet />
+}

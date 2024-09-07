@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {AvatarModule} from "primeng/avatar";
 import {FollowService} from "../../services/follow.service";
 import {Button} from "primeng/button";
-import {NgClass, NgIf} from "@angular/common";
+import {NgClass} from "@angular/common";
 
 @Component({
   selector: 'app-followers',
@@ -10,8 +10,7 @@ import {NgClass, NgIf} from "@angular/common";
   imports: [
     AvatarModule,
     Button,
-    NgClass,
-    NgIf
+    NgClass
   ],
   templateUrl: './followers.component.html',
   styleUrl: './followers.component.css'
@@ -22,49 +21,34 @@ export class FollowersComponent implements OnInit {
 
   constructor(private followService: FollowService) {}
 
-  ngOnInit(): void {
+  public ngOnInit(): void {
     this.loadFollowers();
+
   }
+  public followUser(followedId: number): void {
+    this.loading[followedId] = true;
 
-  private loadFollowers(): void {
-    this.followService.getFollowers().subscribe({
-      next: (followersData) => {
-        // Cargar los usuarios que ya sigues
-        this.followService.getFollowing().subscribe({
-          next: (followingData) => {
-            const followingIds = new Set(followingData.map((user: any) => user.id));
-
-            // Marcar si ya sigues al usuario en la lista de seguidores
-            this.followers = followersData.map((follower: any) => ({
-              ...follower,
-              isFollowing: followingIds.has(follower.id) // Añadir propiedad isFollowing
-            }));
-
-            this.loading = {}; // Resetear el estado de carga
-          },
-          error: (err) => {
-            console.error('Error fetching following', err);
-          }
-        });
+    this.followService.follow(followedId).subscribe({
+      next: () => {
+        this.loadFollowers();
+        this.loading[followedId] = false;
       },
       error: (err) => {
-        console.error('Error fetching followers', err);
+        console.error('Error following user', err);
+        this.loading[followedId] = false;
       }
     });
   }
 
-  followUser(followedId: number): void {
-    this.loading[followedId] = true; // Iniciar el spinner de carga
-
-    this.followService.follow(followedId).subscribe({
-      next: () => {
-        // Una vez seguido, recargar los seguidores para actualizar la vista
-        this.loadFollowers();
-        this.loading[followedId] = false; // Parar el spinner
+  private loadFollowers(): void {
+    this.followService.getFollowers().subscribe({
+      next: (data) => {
+        this.followers = data;
+        console.log('Followers', this.followers);
+        this.loading = {};
       },
       error: (err) => {
-        console.error('Error following user', err);
-        this.loading[followedId] = false; // Parar el spinner en caso de error
+        console.error('Error fetching followers', err);
       }
     });
   }

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, EventEmitter, Output} from '@angular/core';
 import {Button} from "primeng/button";
 import {DividerModule} from "primeng/divider";
 import {IconFieldModule} from "primeng/iconfield";
@@ -22,7 +22,8 @@ import {PostService} from "../../services/post.service";
   styleUrl: './create-post.component.css'
 })
 export class CreatePostComponent {
-  postForm: FormGroup;
+  postForm: FormGroup = new FormGroup({});
+  @Output() postCreated = new EventEmitter<void>();
 
   constructor(private postService: PostService, private fb: FormBuilder) {
     this.postForm = this.fb.group({
@@ -30,11 +31,12 @@ export class CreatePostComponent {
     });
   }
 
-  onSubmit(): void {
+  public onSubmit(): void {
     if (this.postForm.valid) {
       this.postService.create(this.postForm.value).subscribe({
         next: (response) => {
           console.log('Post created successfully:', response);
+          this.postCreated.emit();
         },
         error: (error) => {
           console.error('Error creating post:', error);

@@ -3,6 +3,13 @@
   border-radius: 15px;
   font-size: .8em;
 }
+.follow__content {
+  max-height: 78vh;
+  overflow-y: scroll;
+  &::-webkit-scrollbar {
+    width: 0;
+  }
+}
 ul li {
   list-style-type: none;
   padding: 0;

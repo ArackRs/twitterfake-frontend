@@ -13,26 +13,21 @@ export class AuthService extends ApiBaseService<any> {
     this.resourceEndpoint = '/auth';
   }
 
-  // signUp(item: any): Observable<any> {
-  //   return this.http.post(`${this.resourcePath()}/register`, JSON.stringify(item), {...this.httpOptions, responseType: 'text'})
-  //     .pipe(retry(2), catchError(this.handleError));
-  // }
-
-  signUp(item: any): Observable<any> {
-    return this.http.post(`${this.resourcePath()}/register`, JSON.stringify(item), {...this.httpOptions, responseType: 'text'})
+  public signUp(item: any): Observable<any> {
+    return this.http.post<any>(`${this.resourcePath()}/register`, JSON.stringify(item), this.httpOptions)
       .pipe(retry(2), catchError(this.handleError));
   }
-
-  signIn(item: any): Observable<any> {
+  public signIn(item: any): Observable<any> {
     return this.http.post<any>(`${this.resourcePath()}/login`, JSON.stringify(item), this.httpOptions)
       .pipe(retry(2), catchError(this.handleError));
   }
-
-  getAuthToken(): string | null {
+  public getAuthToken(): string | null {
     return localStorage.getItem('token');
   }
-
-  logout() {
+  public isAuthenticated(): boolean {
+    return !!this.getAuthToken();
+  }
+  public logout(): void {
     localStorage.removeItem('token');
   }
 }

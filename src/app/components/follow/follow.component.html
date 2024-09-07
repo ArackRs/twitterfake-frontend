@@ -1,31 +1,27 @@
-<div class="follow w-20rem p-3">
+<div class="follow w-20rem p-3" *ngIf="isAuthenticated()">
   <div class="container">
-    <h1 class="follow__title">Who to Follow</h1>
-    @for (user of users; track user.id) {
-      <div class="flex justify-content-between align-items-center gap-3 mb-3">
-        <div class="flex align-items-center gap-2">
-          <p-avatar label="U" styleClass="mr-2" size="large" shape="circle" />
-          <div class="box">
-            <b>{{ user.firstName + " " + user.lastName }}</b>
-            <p class="my-0">{{ "@" + user.username }}</p>
+    <h1 class="follow__title pb-3">Who to Follow</h1>
+    <div class="follow__content">
+      @for (user of users; track user.id) {
+        <div class="flex justify-content-between align-items-center gap-3 mb-3">
+          <div class="flex align-items-center gap-2">
+            <p-avatar label="U" styleClass="mr-2" size="large" shape="circle" />
+            <div class="box">
+              <b>{{ user.firstName + " " + user.lastName }}</b>
+              <p class="my-0">{{ "@" + user.username }}</p>
+            </div>
           </div>
+          <p-button
+            label="Follow"
+            severity="contrast"
+            [icon]="loadingUsers[user.id] ? 'pi pi-spin pi-spinner' : 'pi pi-plus'"
+            [rounded]="true"
+            [disabled]="loadingUsers[user.id]"
+            (click)="followUser(user.id)"/>
         </div>
-        <p-button
-          label="Follow"
-          icon="pi pi-plus"
-          severity="contrast"
-          [rounded]="true"
-          (click)="followUser(user.id)"
-          [disabled]="loadingUsers[user.id]">
-          <ng-template pTemplate="icon">
-            <i *ngIf="loadingUsers[user.id]" class="pi pi-spin pi-spinner"></i>
-            <i *ngIf="!loadingUsers[user.id]" class="pi pi-plus"></i>
-          </ng-template>
-        </p-button>
-      </div>
-    } @empty {
-      <p>No users to follow.</p>
-    }
+      } @empty {
+        <p>No users to follow.</p>
+      }
+    </div>
   </div>
 </div>
-

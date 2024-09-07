@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {Button} from "primeng/button";
 import {CardModule} from "primeng/card";
 import {ImageModule} from "primeng/image";
@@ -7,6 +7,7 @@ import {NgForOf, NgIf} from "@angular/common";
 import {FollowService} from "../../services/follow.service";
 import {AvatarModule} from "primeng/avatar";
 import {FooterComponent} from "../footer/footer.component";
+import {AuthService} from "../../services/auth.service";
 
 @Component({
   selector: 'app-follow',
@@ -29,9 +30,9 @@ export class FollowComponent implements OnInit {
   loadingUsers: { [key: number]: boolean } = {};
   currentUserId: number = 0;
 
-  constructor(private userService: UserService, private followService: FollowService) {}
+  constructor(private authService: AuthService, private userService: UserService, private followService: FollowService) {}
 
-  ngOnInit(): void {
+  public ngOnInit(): void {
     this.userService.getUserByUsername(this.userService.getUsername()).subscribe({
       next: (user) => {
         this.currentUserId = user.id;
@@ -43,6 +44,21 @@ export class FollowComponent implements OnInit {
       }
     });
     this.loadUsers();
+  }
+  public followUser(followedId: number): void {
+    this.loadingUsers[followedId] = true;
+    this.followService.follow(followedId).subscribe({
+      next: (response) => {
+        console.log(response);
+        this.loadingUsers[followedId] = false;
+        this.loadUsers();
+        this.followService.notifyUserFollowed();
+      },
+      error: (err) => {
+        console.error('Error following user:', err);
+        this.loadingUsers[followedId] = false;
+      }
+    });
   }
 
   private loadUsers(): void {
@@ -72,19 +88,8 @@ export class FollowComponent implements OnInit {
     });
   }
 
-  public followUser(followedId: number): void {
-    this.loadingUsers[followedId] = true;
-    this.followService.follow(followedId).subscribe({
-      next: (response) => {
-        console.log(response);
-        this.loadingUsers[followedId] = false;
-        this.loadUsers();
-      },
-      error: (err) => {
-        console.error('Error following user:', err);
-        this.loadingUsers[followedId] = false;
-      }
-    });
+  public isAuthenticated(): boolean {
+    return this.authService.isAuthenticated();
   }
 }
 

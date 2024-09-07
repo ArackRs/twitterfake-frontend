@@ -24,12 +24,15 @@ import {UserService} from "../../services/user.service";
   styleUrl: './home.component.css'
 })
 export class HomeComponent implements OnInit{
-
   username: string = '';
+  shouldRefreshPosts = false;
 
   constructor(private userService: UserService) {  }
 
-  ngOnInit(): void {
+  public ngOnInit(): void {
     this.username = this.userService.getUsername() || '';
+  }
+  public onPostCreated() {
+    this.shouldRefreshPosts = true;
   }
 }

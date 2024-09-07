@@ -21,22 +21,12 @@ export class FollowingComponent implements OnInit {
 
   constructor(private followService: FollowService) {}
 
-  ngOnInit(): void {
+  public ngOnInit(): void {
     this.loadFollowing();
-  }
-
-  private loadFollowing(): void {
-    this.followService.getFollowing().subscribe({
-      next: (data) => {
-        this.following = data;
-        this.loading = {};
-      },
-      error: (err) => {
-        console.error('Error fetching following', err);
-      }
+    this.followService.userFollowed$.subscribe(() => {
+      this.loadFollowing();
     });
   }
-
   public unFollowUser(followedId: number): void {
     this.loading[followedId] = true;
 
@@ -51,5 +41,16 @@ export class FollowingComponent implements OnInit {
       }
     });
   }
-}
 
+  private loadFollowing(): void {
+    this.followService.getFollowing().subscribe({
+      next: (data) => {
+        this.following = data;
+        this.loading = {};
+      },
+      error: (err) => {
+        console.error('Error fetching following', err);
+      }
+    });
+  }
+}

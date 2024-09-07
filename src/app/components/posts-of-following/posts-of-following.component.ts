@@ -4,7 +4,6 @@ import {Button} from "primeng/button";
 import {DividerModule} from "primeng/divider";
 import {FollowService} from "../../services/follow.service";
 import {PostService} from "../../services/post.service";
-import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-posts-of-following',
@@ -24,14 +23,24 @@ export class PostsOfFollowingComponent implements OnInit {
   constructor(
     private followService: FollowService,
     private postService: PostService,
-    private router: Router
   ) {}
 
-  ngOnInit() {
+  public ngOnInit(): void {
     this.loadFollowingAndPosts();
   }
+  public deletePost(): void {
+    this.postService.delete().subscribe({
+      next: (): void => {
+        console.log('Post deleted successfully');
+        this.getPostsFromFollowing();
+      },
+      error: (error): void => {
+        console.error('Error deleting post:', error);
+      }
+    });
+  }
 
-  loadFollowingAndPosts() {
+  private loadFollowingAndPosts(): void {
     this.followService.getFollowing().subscribe({
       next: (followingList) => {
         this.following = followingList;
@@ -42,8 +51,7 @@ export class PostsOfFollowingComponent implements OnInit {
       }
     });
   }
-
-  getPostsFromFollowing() {
+  private getPostsFromFollowing(): void {
     const followingIds = this.following.map(user => user.id);
 
     this.postService.getAll().subscribe({
@@ -53,22 +61,6 @@ export class PostsOfFollowingComponent implements OnInit {
       },
       error: (error) => {
         console.error('Error fetching posts:', error);
-      }
-    });
-  }
-
-  getCurrentUserId(): number {
-    return 1
-  }
-
-  deletePost() {
-    this.postService.delete().subscribe({
-      next: () => {
-        console.log('Post deleted successfully');
-        this.getPostsFromFollowing();
-      },
-      error: (error) => {
-        console.error('Error deleting post:', error);
       }
     });
   }

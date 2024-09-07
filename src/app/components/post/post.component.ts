@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
 import {InputTextareaModule} from "primeng/inputtextarea";
 import {IconFieldModule} from "primeng/iconfield";
 import {InputIconModule} from "primeng/inputicon";
@@ -28,28 +28,22 @@ import {AvatarModule} from "primeng/avatar";
   templateUrl: './post.component.html',
   styleUrl: './post.component.css'
 })
-export class PostComponent implements OnInit {
+export class PostComponent implements OnInit, OnChanges {
   posts: any[] = [];
+  @Input() refreshPosts!: boolean;
 
   constructor(private postService: PostService) { }
 
-  ngOnInit() {
+  public ngOnInit(): void {
     this.getPosts();
   }
-
-  getPosts() {
-    this.postService.getAll().subscribe({
-      next: (response) => {
-        this.posts = response.reverse();
-        console.log('Posts fetched successfully:', response);
-      },
-      error: (error) => {
-        console.error('Error fetching posts:', error);
-      }
-    });
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['refreshPosts'] && this.refreshPosts) {
+      this.getPosts();
+    }
   }
 
-  deletePost() {
+  public deletePost(): void {
     this.postService.delete().subscribe({
       next: () => {
         this.getPosts();
@@ -58,6 +52,18 @@ export class PostComponent implements OnInit {
       },
       error: (error) => {
         console.error('Error deleting post:', error);
+      }
+    });
+  }
+
+  private getPosts(): void {
+    this.postService.getAll().subscribe({
+      next: (response) => {
+        this.posts = response.reverse();
+        console.log('Posts fetched successfully:', response);
+      },
+      error: (error) => {
+        console.error('Error fetching posts:', error);
       }
     });
   }

@@ -1,31 +1,27 @@
 import { Component } from '@angular/core';
-import {ButtonModule} from "primeng/button";
-import {InputTextModule} from "primeng/inputtext";
+import {Button} from "primeng/button";
 import {DividerModule} from "primeng/divider";
-import {Router, RouterLink} from "@angular/router";
 import {FooterComponent} from "../../components/footer/footer.component";
-import {NgOptimizedImage} from "@angular/common";
+import {Router, RouterLink} from "@angular/router";
 import {AuthService} from "../../services/auth.service";
 
 @Component({
-  selector: 'app-public',
+  selector: 'app-landing',
   standalone: true,
   imports: [
-    ButtonModule,
-    InputTextModule,
+    Button,
     DividerModule,
-    RouterLink,
     FooterComponent,
-    NgOptimizedImage
+    RouterLink
   ],
-  templateUrl: './public.component.html',
-  styleUrl: './public.component.css'
+  templateUrl: './landing.component.html',
+  styleUrl: './landing.component.css'
 })
-export class PublicComponent {
+export class LandingComponent {
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(private authService: AuthService, private router: Router) {  }
 
-  createGuestAccount() {
+  public createGuestAccount(): void {
     const guestData = {
       firstName: 'Guest',
       lastName: 'User',
@@ -45,6 +41,7 @@ export class PublicComponent {
         this.authService.signIn(credentials).subscribe({
           next: (response) => {
             localStorage.setItem('token', response.token);
+            localStorage.setItem('username', response.username);
             this.router.navigate(['/home']);
           },
           error: (error) => {

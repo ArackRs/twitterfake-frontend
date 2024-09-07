@@ -3,6 +3,9 @@
 input {
   border: none;
   background: transparent;
+  &:focus {
+    outline: none;
+  }
 }
 
 button {

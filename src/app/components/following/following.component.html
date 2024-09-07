@@ -10,17 +10,13 @@
       </div>
       <p-button
         label="Unfollow"
-        icon="pi pi-user-minus"
+        [icon]="loading[user.id] ? 'pi pi-spin pi-spinner' : 'pi pi-user-minus'"
         severity="danger"
         [outlined]="true"
         [rounded]="true"
         (click)="unFollowUser(user.id)"
         [disabled]="loading[user.id]"
-      >
-      <ng-template pTemplate="icon">
-        <i class="pi" [ngClass]="loading[user.id] ? 'pi-spin pi-spinner' : 'pi-user-minus'"></i>
-      </ng-template>
-      </p-button>
+      />
     </div>
   } @empty {
     <p>No following users.</p>

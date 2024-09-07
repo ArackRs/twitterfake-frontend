@@ -1,9 +1,6 @@
 main {
 
 }
-section {
-  border-inline: 1px solid rgba(134, 134, 134, 0.5);
-}
 
 .profile-header {
   display: flex;
@@ -79,4 +76,25 @@ section {
 
 .follow-username {
   color: #888;
+}
+@media (max-width: 768px) {
+  .profile-header {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .profile-avatar img {
+    width: 100px;
+    height: 100px;
+  }
+
+  .profile-info h1 {
+    font-size: 1.25rem;
+  }
+
+  .follow-avatar img {
+    width: 40px;
+    height: 40px;
+  }
+
 }

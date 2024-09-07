@@ -32,7 +32,7 @@ export class LoginComponent {
     });
   }
 
-  onSubmit() {
+  public onSubmit(): void {
     if (this.loginForm.valid) {
       const credentials = {
         username: this.loginForm.value.username,
@@ -43,12 +43,10 @@ export class LoginComponent {
         next: (response) => {
           localStorage.setItem('token', response.token);
           localStorage.setItem('username', response.username);
-          console.log(localStorage.getItem('token'));
-          console.log('Inicio de sesión exitoso', response);
-          this.router.navigate(['/home']);
+          this.router.navigate(['/home']).then(r => console.log('Navigation a /home:', r));
         },
         error: (error) => {
-          console.error('Error en el inicio de sesión:', error);
+          console.error('Error al iniciar sesión:', error);
         }
       });
     } else {
