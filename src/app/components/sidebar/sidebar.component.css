@@ -1,0 +1,16 @@
+.sidebar {
+  position: static;
+  width: min-content;
+}
+.sidebar__content .p-button {
+  width: min-content;
+}
+@media (max-width: 425px) {
+  h1 {
+    display: none;
+  }
+  ::ng-deep .p-button {
+    padding: .5rem;
+  }
+}
+

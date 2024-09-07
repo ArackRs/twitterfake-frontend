@@ -1,0 +1,16 @@
+{
+  "projects": {
+    "default": "enlace-2eedf"
+  },
+  "targets": {
+    "enlace-2eedf": {
+      "hosting": {
+        "t-enlace": [
+          "t-enlace"
+        ]
+      }
+    }
+  },
+  "etags": {},
+  "dataconnectEmulatorConfig": {}
+}

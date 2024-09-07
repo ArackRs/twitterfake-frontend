@@ -1,0 +1,14 @@
+.card {
+}
+input {
+  border: none;
+  background: transparent;
+  &:focus {
+    outline: none;
+  }
+}
+
+button {
+  position: relative;
+  right: 0;
+}
