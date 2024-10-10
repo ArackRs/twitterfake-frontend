@@ -1,7 +1,7 @@
-<nav class="sidebar h-screen pt-3 pr-3" *ngIf="isAuthenticated()">
+<nav class="sidebar h-screen pt-3 pr-3">
   <div class="container">
     <div class="sidebar__header pb-3">
-      <h1 class="sidebar__title" [routerLink]="['/']">Enlace</h1>
+      <h1 class="sidebar__title" [routerLink]="['/']">Twitter</h1>
     </div>
     <div class="sidebar__content flex flex-column gap-3">
       <p-button
@@ -11,7 +11,7 @@
         severity="contrast"
         [rounded]="true" />
       <p-button
-        [routerLink]="['/profile']"
+        [routerLink]="['/profile/', user?.username]"
         label="Profile"
         icon="pi pi-user"
         severity="contrast"
@@ -24,4 +24,5 @@
         [rounded]="true" />
     </div>
   </div>
+  <app-footer />
 </nav>

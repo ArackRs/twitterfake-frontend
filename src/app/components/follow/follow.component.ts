@@ -1,4 +1,4 @@
-import {Component, EventEmitter, OnInit, Output} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Button} from "primeng/button";
 import {CardModule} from "primeng/card";
 import {ImageModule} from "primeng/image";
@@ -8,6 +8,8 @@ import {FollowService} from "../../services/follow.service";
 import {AvatarModule} from "primeng/avatar";
 import {FooterComponent} from "../footer/footer.component";
 import {AuthService} from "../../services/auth.service";
+import {NotificationService} from "../../services/notification.service";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-follow',
@@ -30,20 +32,29 @@ export class FollowComponent implements OnInit {
   loadingUsers: { [key: number]: boolean } = {};
   currentUserId: number = 0;
 
-  constructor(private authService: AuthService, private userService: UserService, private followService: FollowService) {}
+  constructor(
+    private readonly userService: UserService,
+    private readonly followService: FollowService,
+    private readonly notificationService: NotificationService,
+    private readonly router: Router
+  ) {}
 
   public ngOnInit(): void {
-    this.userService.getUserByUsername(this.userService.getUsername()).subscribe({
+    const username: string = this.userService.getUsername();
+    this.userService.getUserByUsername(username).subscribe({
       next: (user) => {
-        this.currentUserId = user.id;
-        console.log('Current user fetched:', user);
         this.user = user;
+        this.currentUserId = user.id;
+        console.log('Current user id:', this.currentUserId);
       },
       error: (err) => {
-        console.error('Error fetching current user:', err);
+        console.error('Error fetching user:', err);
       }
     });
     this.loadUsers();
+    this.notificationService.userFollow$.subscribe(() => {
+      this.loadUsers();
+    });
   }
   public followUser(followedId: number): void {
     this.loadingUsers[followedId] = true;
@@ -52,7 +63,8 @@ export class FollowComponent implements OnInit {
         console.log(response);
         this.loadingUsers[followedId] = false;
         this.loadUsers();
-        this.followService.notifyUserFollowed();
+        this.notificationService.notifyFollow();
+        this.notificationService.notifyPost();
       },
       error: (err) => {
         console.error('Error following user:', err);
@@ -66,7 +78,7 @@ export class FollowComponent implements OnInit {
     this.userService.getAll().subscribe({
       next: (allUsers) => {
 
-        this.followService.getFollowing().subscribe({
+        this.followService.getFollowingByUserId(this.currentUserId).subscribe({
           next: (followers) => {
 
             const followerIds = new Set(followers.map((user: any) => user.id));
@@ -88,8 +100,8 @@ export class FollowComponent implements OnInit {
     });
   }
 
-  public isAuthenticated(): boolean {
-    return this.authService.isAuthenticated();
+  goProfile(username: string) {
+    this.router.navigate([`/profile/${username}`]);
   }
 }
 

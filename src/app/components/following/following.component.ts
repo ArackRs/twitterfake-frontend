@@ -3,6 +3,9 @@ import {AvatarModule} from "primeng/avatar";
 import {FollowService} from "../../services/follow.service";
 import {Button} from "primeng/button";
 import {NgClass} from "@angular/common";
+import {NotificationService} from "../../services/notification.service";
+import {ActivatedRoute, Router} from "@angular/router";
+import {UserService} from "../../services/user.service";
 
 @Component({
   selector: 'app-following',
@@ -18,12 +21,22 @@ import {NgClass} from "@angular/common";
 export class FollowingComponent implements OnInit {
   following: any[] = [];
   loading: { [key: number]: boolean } = {};
+  username: string = '';
 
-  constructor(private followService: FollowService) {}
+  constructor(
+    private userService: UserService,
+    private followService: FollowService,
+    private notificationService: NotificationService,
+    private route: ActivatedRoute,
+    private router: Router
+  ) {}
 
   public ngOnInit(): void {
-    this.loadFollowing();
-    this.followService.userFollowed$.subscribe(() => {
+    this.route.paramMap.subscribe(params => {
+      this.username = params.get('username') || '';
+      this.loadFollowing();
+    });
+    this.notificationService.userFollow$.subscribe(() => {
       this.loadFollowing();
     });
   }
@@ -34,6 +47,7 @@ export class FollowingComponent implements OnInit {
       next: () => {
         this.loadFollowing();
         this.loading[followedId] = false;
+        this.notificationService.notifyFollow();
       },
       error: (err) => {
         console.error('Error while unfollowing', err);
@@ -43,14 +57,27 @@ export class FollowingComponent implements OnInit {
   }
 
   private loadFollowing(): void {
-    this.followService.getFollowing().subscribe({
-      next: (data) => {
-        this.following = data;
-        this.loading = {};
-      },
-      error: (err) => {
-        console.error('Error fetching following', err);
+    if (this.username) {
+      this.userService.getUserByUsername(this.username).subscribe({
+        next: (user) => {
+          this.followService.getFollowingByUserId(user.id).subscribe({
+            next: (data) => {
+              this.following = data;
+              this.loading = {};
+            },
+            error: (err) => {
+              console.error('Error fetching following', err);
+            }
+          });
+        },
+        error: (err) => {
+          console.error('Error fetching current user:', err);
+        }
+      });
       }
-    });
+    }
+
+  goProfile(username: string | undefined) {
+    this.router.navigate([`/profile/${username}`]);
   }
 }

@@ -1,20 +1,19 @@
 import { Injectable } from '@angular/core';
-import {environment} from "../../environments/environment.development";
 import {HttpClient, HttpErrorResponse, HttpHeaders} from "@angular/common/http";
 import {catchError, Observable, retry, throwError} from "rxjs";
+import {environment} from "../../environments/environment";
 
 @Injectable({
   providedIn: 'root'
 })
 export class ApiBaseService<T> {
 
-  basePath: string = `${environment.serverBasePath}`;
+  basePath: string = `${environment.apiUrl}`;
   resourceEndpoint: string = '/resources';
 
   httpOptions: { headers: HttpHeaders } = {
     headers: new HttpHeaders({
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${localStorage.getItem('token')}`
     })
   }
 
@@ -26,11 +25,15 @@ export class ApiBaseService<T> {
 
   public handleError(error: HttpErrorResponse) {
     if (error.error instanceof ErrorEvent) {
+      // Error de red o del lado del cliente.
       console.error(`An error occurred: ${error.error.message}`);
+      // Aquí podrías llamar a un servicio de notificaciones para mostrar el mensaje.
+      // this.notificationService.showError('Network error occurred. Please check your connection.');
     } else {
-      console.log(`Backend returned code ${error.status}, body was: ${error.error}`);
+      // Error del backend.
+      console.error(`Backend returned code ${error.status}, body was: ${error.error}`);
     }
-    return throwError(() => new Error("Something happened with request, please try again later."));
+    return throwError(() => new Error("Something happened with the request, please try again later."));
   }
 
   public create(item: any): Observable<T> {

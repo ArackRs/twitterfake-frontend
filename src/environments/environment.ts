@@ -1,3 +1,4 @@
 export const environment = {
-  serverBasePath: 'https://tdenlace-fhefasf4gvb3acgq.eastus-01.azurewebsites.net/api/v1'
+  production: true,
+  apiUrl: 'https://twitterapi.azurewebsites.net/api/v1'
 };

@@ -6,6 +6,7 @@ import {InputIconModule} from "primeng/inputicon";
 import {InputTextModule} from "primeng/inputtext";
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {PostService} from "../../services/post.service";
+import {NotificationService} from "../../services/notification.service";
 
 @Component({
   selector: 'app-create-post',
@@ -25,7 +26,11 @@ export class CreatePostComponent {
   postForm: FormGroup = new FormGroup({});
   @Output() postCreated = new EventEmitter<void>();
 
-  constructor(private postService: PostService, private fb: FormBuilder) {
+  constructor(
+    private postService: PostService,
+    private fb: FormBuilder,
+    private notificationService: NotificationService
+  ) {
     this.postForm = this.fb.group({
       content: ['', Validators.required]
     });
@@ -37,6 +42,7 @@ export class CreatePostComponent {
         next: (response) => {
           console.log('Post created successfully:', response);
           this.postCreated.emit();
+          this.notificationService.notifyPost();
         },
         error: (error) => {
           console.error('Error creating post:', error);
