@@ -58,6 +58,9 @@ section {
   gap: 1rem;
   border-bottom: 1px solid #ddd;
   padding: 0.5rem 0;
+  .box-1 {
+    cursor: pointer;
+  }
 }
 
 .follow-avatar {

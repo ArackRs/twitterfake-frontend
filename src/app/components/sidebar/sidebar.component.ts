@@ -1,8 +1,11 @@
-import { Component } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Button} from "primeng/button";
 import {Router, RouterLink} from "@angular/router";
 import {AuthService} from "../../services/auth.service";
 import {NgIf} from "@angular/common";
+import {FooterComponent} from "../footer/footer.component";
+import {UserService} from "../../services/user.service";
+import {User} from "../../model/user";
 
 @Component({
   selector: 'app-sidebar',
@@ -10,20 +13,38 @@ import {NgIf} from "@angular/common";
   imports: [
     Button,
     RouterLink,
-    NgIf
+    NgIf,
+    FooterComponent
   ],
   templateUrl: './sidebar.component.html',
   styleUrl: './sidebar.component.css'
 })
-export class SidebarComponent {
+export class SidebarComponent implements OnInit {
+  user: User | null = null;
 
-  constructor(private authService: AuthService, private router: Router) {  }
-
+  constructor(
+    private readonly userService: UserService,
+    private readonly authService: AuthService,
+    private readonly router: Router
+  ) {  }
+  ngOnInit(): void {
+    if (this.isAuthenticated()) {
+      this.userService.loadCurrentUser().subscribe(user => {
+        this.user = user;
+      });
+    }
+  }
   public isAuthenticated(): boolean {
     return this.authService.isAuthenticated();
   }
   public logout(): void {
-    this.authService.logout();
-    this.router.navigate(['/']).then(r => console.log('Logout'));
+    this.authService.signOut().subscribe({
+      next: () => {
+        this.router.navigate(['/']).then(r => console.log('Logout successful, redirected to home.'));
+      },
+      error: (error) => {
+        console.error('Error during logout:', error);
+      }
+    });
   }
 }

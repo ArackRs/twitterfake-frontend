@@ -1,13 +1,13 @@
-<div class="follow w-20rem p-3" *ngIf="isAuthenticated()">
+<div class="follow w-20rem p-3">
   <div class="container">
     <h1 class="follow__title pb-3">Who to Follow</h1>
     <div class="follow__content">
       @for (user of users; track user.id) {
         <div class="flex justify-content-between align-items-center gap-3 mb-3">
-          <div class="flex align-items-center gap-2">
+          <div class="flex align-items-center gap-2" (click)="goProfile(user.username)">
             <p-avatar label="U" styleClass="mr-2" size="large" shape="circle" />
             <div class="box">
-              <b>{{ user.firstName + " " + user.lastName }}</b>
+              <b>{{ user.fullName }}</b>
               <p class="my-0">{{ "@" + user.username }}</p>
             </div>
           </div>

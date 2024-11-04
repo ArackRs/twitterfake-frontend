@@ -1,13 +1,7 @@
-export class User {
-  firstName: string;
-  lastName: string;
+export interface User {
+  id: number;
+  fullName: string;
   username: string;
   password: string;
-
-  constructor() {
-    this.firstName = '';
-    this.lastName = '';
-    this.username = '';
-    this.password = '';
-  }
+  role: string[];
 }

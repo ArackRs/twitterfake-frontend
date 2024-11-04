@@ -6,6 +6,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { RouterLink } from '@angular/router';
 import { AuthService } from "../../services/auth.service";
 import {User} from "../../model/user";
+import {SignUp} from "../../model/sign-up";
 
 @Component({
   selector: 'app-register',
@@ -21,12 +22,12 @@ import {User} from "../../model/user";
 })
 export class RegisterComponent {
   registerForm: FormGroup;
-  user: User = new User();
+  register: SignUp | null = null;
 
   constructor(
-    private authService: AuthService,
-    private formBuilder: FormBuilder,
-    private router: Router
+    private readonly authService: AuthService,
+    private readonly formBuilder: FormBuilder,
+    private readonly router: Router
   ) {
     this.registerForm = this.formBuilder.group({
       firstname: ['', Validators.required],
@@ -38,19 +39,23 @@ export class RegisterComponent {
 
   public onSubmit(): void {
     if (this.registerForm.valid) {
-      this.user.firstName = this.registerForm.value.firstname;
-      this.user.lastName = this.registerForm.value.lastname;
-      this.user.username = this.registerForm.value.username;
-      this.user.password = this.registerForm.value.password;
 
-      console.log('Usuario a registrar:', this.user);
-      this.authService.signUp(this.user).subscribe({
-        next: (response) => {
-          console.log('Usuario registrado con éxito', response);
-          this.router.navigate(['/login']);
+      this.register = {
+        firstName: this.registerForm.get('firstname')?.value,
+        lastName: this.registerForm.get('lastname')?.value,
+        username: this.registerForm.get('username')?.value,
+        password: this.registerForm.get('password')?.value
+      };
+
+      this.authService.signUp(this.register).subscribe({
+
+        next: () => {
+          this.router.navigate(['/home'])
+            .then(r => console.log('Redirection a /home:', r));
         },
         error: (error) => {
           console.error('Error en el registro:', error);
+          alert('Error en el registro. Por favor, intente de nuevo.');
         }
       });
     } else {

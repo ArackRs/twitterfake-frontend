@@ -9,15 +9,15 @@ export const routes: Routes = [
   },
   {
     path: 'landing',
-    loadComponent: () => import('./pages/landing/landing.component').then(m => m.LandingComponent)
+    loadComponent: () => import('./pages/landing/landing.component').then(m => m.LandingComponent),
   },
   {
     path: 'register',
-    loadComponent: () => import('./pages/register/register.component').then(m => m.RegisterComponent)
+    loadComponent: () => import('./pages/register/register.component').then(m => m.RegisterComponent),
   },
   {
     path: 'login',
-    loadComponent: () => import('./pages/login/login.component').then(m => m.LoginComponent)
+    loadComponent: () => import('./pages/login/login.component').then(m => m.LoginComponent),
   },
   {
     path: 'home',
@@ -25,12 +25,12 @@ export const routes: Routes = [
     canActivate: [authGuard]
   },
   {
-    path: 'profile',
+    path: 'profile/:username',
     loadComponent: () => import('./pages/profile/profile.component').then(m => m.ProfileComponent),
     canActivate: [authGuard]
   },
   {
     path: '**',
-    loadComponent: () => import('./pages/notfound/notfound.component').then(m => m.NotfoundComponent)
+    loadComponent: () => import('./pages/not-found/not-found.component').then(m => m.NotFoundComponent)
   }
 ];

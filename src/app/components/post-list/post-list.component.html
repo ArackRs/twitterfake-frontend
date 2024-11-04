@@ -1,0 +1,24 @@
+<div class="post-container">
+  @for (post of posts; track post.id) {
+    <div class="post-card">
+      <div class="post-header flex align-items-center py-3">
+        <p-avatar label="U" styleClass="mr-2" size="xlarge" shape="circle"></p-avatar>
+        <div class="post-author-info flex flex-column gap-2">
+          <b>{{ post.username }}</b>
+          <time class="mb-0">{{ post.createdAt }}</time>
+        </div>
+      </div>
+      <div class="post-content w-full">
+        <p class="post-text">{{ post.content }}</p>
+      </div>
+      <div class="post-footer flex justify-content-end gap-3">
+        <ng-content select="p-button"></ng-content>
+        <p-button icon="pi pi-bookmark" [rounded]="true" severity="secondary" [outlined]="true" [disabled]="true" />
+        <p-button icon="pi pi-heart" [rounded]="true" severity="help" [outlined]="true" [disabled]="true" />
+      </div>
+      <p-divider />
+    </div>
+  } @empty {
+    <p>No posts available.</p>
+  }
+</div>

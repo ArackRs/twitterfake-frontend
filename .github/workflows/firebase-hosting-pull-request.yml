@@ -17,6 +17,5 @@ jobs:
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: ${{ secrets.GITHUB_TOKEN }}
-          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_ENLACE_2EEDF }}
-          projectId: enlace-2eedf
-          target: t-enlace
+          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_TWITTER_ARACKRS }}
+          projectId: twitter-arackrs

@@ -1,14 +1,19 @@
-<div class="container">
-  <app-create-post (postCreated)="onPostCreated()" />
-  <h1 class="px-3">Welcome {{ "@" + username }}</h1>
-  <div class="card">
-    <p-tabView>
-      <p-tabPanel header="For you">
-        <app-post [refreshPosts]="shouldRefreshPosts" />
-      </p-tabPanel>
-      <p-tabPanel header="Following">
-        <app-post [refreshPosts]="shouldRefreshPosts" />
-      </p-tabPanel>
-    </p-tabView>
-  </div>
-</div>
+<main class="flex w-full">
+  <section class=" w-full pt-6">
+    <div class="container">
+      <app-create-post (postCreated)="onPostCreated()" />
+      <h1 class="px-3">Welcome {{ "@" + username }}</h1>
+      <div class="card">
+        <p-tabView>
+          <p-tabPanel header="For you">
+            <app-post-list [posts]="forYouPosts" />
+          </p-tabPanel>
+          <p-tabPanel header="Following">
+            <app-post-list [posts]="followingPosts" />
+          </p-tabPanel>
+        </p-tabView>
+      </div>
+    </div>
+  </section>
+</main>
+

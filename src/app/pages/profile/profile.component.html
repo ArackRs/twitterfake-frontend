@@ -1,28 +1,36 @@
-<div class="container">
-  <div class="profile-header p-3">
-    <div class="profile-avatar">
-      <img alt="Profile Avatar" src="https://via.placeholder.com/150" />
+<main class="flex w-full">
+  <section class=" w-full pt-6">
+    <div class="container">
+      <div class="profile-header p-3">
+        <div class="profile-avatar">
+          <img alt="Profile Avatar" src="https://via.placeholder.com/150" />
+        </div>
+        <div class="profile-info">
+          <h1>{{ profile.fullName }}</h1>
+          <p class="pb-3">{{ "@" + profile.username }}</p>
+          <p-button class="edit-profile-button" (click)="showDialog()" label="Edit Profile" />
+        </div>
+      </div>
+      <div class="card">
+        <p-tabView>
+          <p-tabPanel header="Posts">
+            <app-post-list [posts]="myPosts">
+              <ng-template pTemplate="p-button">
+                <p-button icon="pi pi-trash" [rounded]="true" severity="secondary" [outlined]="true" [disabled]="true" />
+              </ng-template>
+            </app-post-list>
+          </p-tabPanel>
+          <p-tabPanel header="Following">
+            <app-following />
+          </p-tabPanel>
+          <p-tabPanel header="Followers">
+            <app-followers />
+          </p-tabPanel>
+        </p-tabView>
+      </div>
     </div>
-    <div class="profile-info">
-      <h1>{{ user.firstName + " " + user.lastName }}</h1>
-      <p class="pb-3">{{ "@" + user.username }}</p>
-      <p-button class="edit-profile-button" (click)="showDialog()" label="Edit Profile" />
-    </div>
-  </div>
-  <div class="card">
-    <p-tabView>
-      <p-tabPanel header="Posts">
-        <app-post></app-post>
-      </p-tabPanel>
-      <p-tabPanel header="Following">
-        <app-following />
-      </p-tabPanel>
-      <p-tabPanel header="Followers">
-        <app-followers />
-      </p-tabPanel>
-    </p-tabView>
-  </div>
-</div>
+  </section>
+</main>
 
 <p-dialog header="Edit Profile" [modal]="true" [(visible)]="visible" [style]="{ width: '25rem' }">
   <span class="p-text-secondary block mb-5">Update your information.</span>

@@ -1,7 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {CreatePostComponent} from "../../components/create-post/create-post.component";
 import {FollowComponent} from "../../components/follow/follow.component";
-import {PostComponent} from "../../components/post/post.component";
 import {PrimeTemplate} from "primeng/api";
 import {SidebarComponent} from "../../components/sidebar/sidebar.component";
 import {TabViewModule} from "primeng/tabview";
@@ -14,6 +13,10 @@ import {FollowersComponent} from "../../components/followers/followers.component
 import {DialogModule} from "primeng/dialog";
 import {FormsModule} from "@angular/forms";
 import {InputTextModule} from "primeng/inputtext";
+import {PostListComponent} from "../../components/post-list/post-list.component";
+import {PostService} from "../../services/post.service";
+import {ProfileService} from "../../services/profile.service";
+import {ActivatedRoute} from "@angular/router";
 
 @Component({
   selector: 'app-profile',
@@ -21,7 +24,6 @@ import {InputTextModule} from "primeng/inputtext";
   imports: [
     CreatePostComponent,
     FollowComponent,
-    PostComponent,
     PrimeTemplate,
     SidebarComponent,
     TabViewModule,
@@ -32,39 +34,54 @@ import {InputTextModule} from "primeng/inputtext";
     FollowersComponent,
     DialogModule,
     FormsModule,
-    InputTextModule
+    InputTextModule,
+    PostListComponent
   ],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.css'
 })
 export class ProfileComponent implements OnInit {
-  user: any = {};
+  profile: any = {};
+  allPosts: any[] = [];
+  myPosts: any[] = [];
   following: any[] = [];
   visible: boolean = false;
   firstName: string = '';
   lastName: string = '';
 
-  constructor(private userService: UserService) {  }
+  constructor(
+    private readonly userService: UserService,
+    private readonly profileService: ProfileService,
+    private readonly postService: PostService,
+    private readonly route: ActivatedRoute
+  ) {  }
 
   public ngOnInit(): void {
     this.loadUserProfile();
   }
   public saveProfile(): void {
-    const updatedUser = {
+    const userProfile = {
       firstName: this.firstName,
       lastName: this.lastName,
+      email: '',
+      street: '',
+      number: '',
+      city: '',
+      zipCode: '',
+      country: ''
     };
 
-    this.userService.update(updatedUser).subscribe(
-      response => {
-        console.log('Profile updated successfully', response);
+    console.log('Updating profile:', userProfile);
+    this.profileService.update(userProfile).subscribe({
+      next: (response) => {
+        console.log('Profile updated successfully:', response);
         this.hideDialog();
         this.loadUserProfile();
       },
-      error => {
-        console.error('Error updating profile', error);
+      error: (error) => {
+        console.error('Error updating profile:', error);
       }
-    );
+    });
   }
   public showDialog(): void {
     this.visible = true;
@@ -74,13 +91,36 @@ export class ProfileComponent implements OnInit {
   }
 
   private loadUserProfile(): void {
-    this.userService.getUserByUsername(this.userService.getUsername()).subscribe({
-      next: (user) => {
-        this.user = user;
+    this.route.paramMap.subscribe(params => {
+      const username = params.get('username') ?? '';
+      this.profileService.getProfileByUsername(username).subscribe({
+        next: (profile) => {
+          this.profile = profile;
+          this.loadAllPosts(profile.username);
+        },
+        error: (err) => {
+          console.error('Error fetching current user:', err);
+        }
+      });
+    });
+  }
+
+  private loadAllPosts(username: string): void {
+    this.postService.getPostsByUsername(username).subscribe({
+      next: (response) => {
+        this.allPosts = response;
+        this.filterPosts();
+        console.log('Posts fetched successfully:', response);
       },
-      error: (err) => {
-        console.error('Error fetching current user:', err);
+      error: (error) => {
+        console.error('Error fetching posts:', error);
       }
     });
+  }
+
+  private filterPosts(): void {
+    this.myPosts = this.allPosts
+      .filter(post => post.username === this.userService.getUsername())
+      .reverse();
   }
 }

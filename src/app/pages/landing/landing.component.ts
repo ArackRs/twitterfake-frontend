@@ -4,6 +4,7 @@ import {DividerModule} from "primeng/divider";
 import {FooterComponent} from "../../components/footer/footer.component";
 import {Router, RouterLink} from "@angular/router";
 import {AuthService} from "../../services/auth.service";
+import {UserService} from "../../services/user.service";
 
 @Component({
   selector: 'app-landing',
@@ -19,38 +20,19 @@ import {AuthService} from "../../services/auth.service";
 })
 export class LandingComponent {
 
-  constructor(private authService: AuthService, private router: Router) {  }
+  constructor(
+    private readonly authService: AuthService,
+    private readonly router: Router) {  }
 
   public createGuestAccount(): void {
-    const guestData = {
-      firstName: 'Guest',
-      lastName: 'User',
-      username: `guest_${Math.random().toString(36).substring(7)}`,
-      password: 'guestpassword',
-    };
 
-    this.authService.signUp(guestData).subscribe({
-      next: (response) => {
-        console.log('Usuario registrado con éxito', response);
-
-        const credentials = {
-          username: guestData.username,
-          password: guestData.password,
-        };
-
-        this.authService.signIn(credentials).subscribe({
-          next: (response) => {
-            localStorage.setItem('token', response.token);
-            localStorage.setItem('username', response.username);
-            this.router.navigate(['/home']);
-          },
-          error: (error) => {
-            console.error('Error al iniciar sesión con la cuenta de invitado:', error);
-          }
-        });
+    this.authService.guest().subscribe({
+      next: () => {
+        this.router.navigate(['/home'])
+          .then(r => console.log('Navigation a /home:', r));
       },
       error: (error) => {
-        console.error('Error al crear la cuenta de invitado:', error);
+        console.error('Error creating guest account:', error);
       }
     });
   }
