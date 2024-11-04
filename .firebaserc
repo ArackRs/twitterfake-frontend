@@ -1,15 +1,6 @@
 {
   "projects": {
-    "default": "enlace-2eedf"
-  },
-  "targets": {
-    "enlace-2eedf": {
-      "hosting": {
-        "t-enlace": [
-          "t-enlace"
-        ]
-      }
-    }
+    "default": "twitter-arackrs"
   },
   "etags": {},
   "dataconnectEmulatorConfig": {}
