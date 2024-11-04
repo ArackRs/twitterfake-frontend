@@ -18,17 +18,20 @@ export class FollowService extends ApiBaseService<Follow> {
     return this.http.get<Follow[]>(`${this.resourcePath()}/followers/${userId}`, this.httpOptions)
       .pipe(retry(2), catchError(this.handleError));
   }
-  public getFollowingByUserId(userId: number): Observable<any[]> {
+  public getFollowingByUserId(userId: number): Observable<Follow[]> {
+    console.log('getFollowingByUserId', userId);
     return this.http.get<Follow[]>(`${this.resourcePath()}/following/${userId}`, this.httpOptions)
       .pipe(retry(2), catchError(this.handleError));
   }
 
-  public follow(followedId: number): Observable<any> {
-    return this.http.post(`${this.resourcePath()}/${followedId}`, this.httpOptions)
+  public follow(followedId: number): Observable<void> {
+    return this.http.post<void>(`${this.resourcePath()}/${followedId}`, this.httpOptions)
       .pipe(retry(2), catchError(this.handleError));
   }
-  public unFollow(followedId: number): Observable<any> {
-    return this.http.delete(`${this.resourcePath()}/unfollow/${followedId}`, this.httpOptions)
+
+  public unFollow(followedId: number): Observable<void> {
+    console.log('unfollow', followedId);
+    return this.http.delete<void>(`${this.resourcePath()}/unfollow/${followedId}`, this.httpOptions)
       .pipe(retry(2), catchError(this.handleError));
 
   }

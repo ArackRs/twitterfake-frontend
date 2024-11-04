@@ -54,15 +54,16 @@ export class FollowComponent implements OnInit {
     this.loadUsers();
     this.notificationService.userFollow$.subscribe(() => {
       this.loadUsers();
+      console.log('User follow notification, LOAD USERS');
     });
   }
   public followUser(followedId: number): void {
     this.loadingUsers[followedId] = true;
     this.followService.follow(followedId).subscribe({
-      next: (response) => {
-        console.log(response);
+      next: () => {
         this.loadingUsers[followedId] = false;
         this.loadUsers();
+        console.log('User follow notification, LOAD USERS2');
         this.notificationService.notifyFollow();
         this.notificationService.notifyPost();
       },
@@ -86,8 +87,10 @@ export class FollowComponent implements OnInit {
             this.users = allUsers.filter((user: any) => {
               const notFollowed = !followerIds.has(user.id);
               const notCurrentUser = user.id !== this.currentUserId; // Excluir el usuario actual
+              console.log('userId:', user.id, 'currentUserId:', this.currentUserId);
               return notFollowed && notCurrentUser;
             });
+            console.log('Users:', this.users);
           },
           error: (err) => {
             console.error('Error fetching following:', err);

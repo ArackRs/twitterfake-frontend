@@ -6,6 +6,7 @@ import {NgClass} from "@angular/common";
 import {NotificationService} from "../../services/notification.service";
 import {ActivatedRoute, Router} from "@angular/router";
 import {UserService} from "../../services/user.service";
+import {Follow} from "../../model/follow";
 
 @Component({
   selector: 'app-following',
@@ -19,38 +20,47 @@ import {UserService} from "../../services/user.service";
   styleUrl: './following.component.css'
 })
 export class FollowingComponent implements OnInit {
-  following: any[] = [];
+  following: Follow[] = [];
   loading: { [key: number]: boolean } = {};
   username: string = '';
 
   constructor(
-    private userService: UserService,
-    private followService: FollowService,
-    private notificationService: NotificationService,
-    private route: ActivatedRoute,
-    private router: Router
+    private readonly userService: UserService,
+    private readonly followService: FollowService,
+    private readonly notificationService: NotificationService,
+    private readonly route: ActivatedRoute,
+    private readonly router: Router
   ) {}
 
   public ngOnInit(): void {
     this.route.paramMap.subscribe(params => {
-      this.username = params.get('username') || '';
+      this.username = params.get('username') ?? '';
       this.loadFollowing();
     });
     this.notificationService.userFollow$.subscribe(() => {
       this.loadFollowing();
     });
   }
-  public unFollowUser(followedId: number): void {
+
+  public unFollowUser(followedId: number, username: string): void {
     this.loading[followedId] = true;
 
-    this.followService.unFollow(followedId).subscribe({
-      next: () => {
-        this.loadFollowing();
-        this.loading[followedId] = false;
-        this.notificationService.notifyFollow();
+    this.userService.getUserByUsername(username).subscribe({
+      next: (user) => {
+        this.followService.unFollow(user.id).subscribe({
+          next: () => {
+            this.loadFollowing();
+            this.loading[followedId] = false;
+            this.notificationService.notifyFollow();
+          },
+          error: (err) => {
+            console.error('Error while unfollowing', err);
+            this.loading[followedId] = false;
+          }
+        });
       },
       error: (err) => {
-        console.error('Error while unfollowing', err);
+        console.error('Error fetching user', err);
         this.loading[followedId] = false;
       }
     });

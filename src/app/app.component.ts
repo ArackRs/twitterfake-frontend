@@ -10,6 +10,7 @@ import {TabViewModule} from "primeng/tabview";
 import {DividerModule} from "primeng/divider";
 import {LandingComponent} from "./pages/landing/landing.component";
 import {NgIf} from "@angular/common";
+import {AuthService} from "./services/auth.service";
 
 @Component({
   selector: 'app-root',
@@ -33,4 +34,13 @@ import {NgIf} from "@angular/common";
 })
 export class AppComponent {
   title = 'EnlaceFrontend';
+
+  constructor(
+    private authService: AuthService,
+  ) {
+  }
+
+  public get isLoggedIn(): boolean {
+    return this.authService.isAuthenticated();
+  }
 }

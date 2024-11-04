@@ -1,3 +1,5 @@
-<div id="app" class="flex">
+<div id="app" class="flex lg:gap-3">
+  <app-sidebar *ngIf="isLoggedIn" />
   <router-outlet />
+  <app-follow *ngIf="isLoggedIn" />
 </div>

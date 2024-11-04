@@ -60,21 +60,28 @@ export class ProfileComponent implements OnInit {
     this.loadUserProfile();
   }
   public saveProfile(): void {
-    const updatedUser = {
+    const userProfile = {
       firstName: this.firstName,
       lastName: this.lastName,
+      email: '',
+      street: '',
+      number: '',
+      city: '',
+      zipCode: '',
+      country: ''
     };
 
-    this.profileService.update(updatedUser).subscribe(
-      response => {
-        console.log('Profile updated successfully', response);
+    console.log('Updating profile:', userProfile);
+    this.profileService.update(userProfile).subscribe({
+      next: (response) => {
+        console.log('Profile updated successfully:', response);
         this.hideDialog();
         this.loadUserProfile();
       },
-      error => {
-        console.error('Error updating profile', error);
+      error: (error) => {
+        console.error('Error updating profile:', error);
       }
-    );
+    });
   }
   public showDialog(): void {
     this.visible = true;
@@ -85,7 +92,7 @@ export class ProfileComponent implements OnInit {
 
   private loadUserProfile(): void {
     this.route.paramMap.subscribe(params => {
-      const username = params.get('username') || '';
+      const username = params.get('username') ?? '';
       this.profileService.getProfileByUsername(username).subscribe({
         next: (profile) => {
           this.profile = profile;

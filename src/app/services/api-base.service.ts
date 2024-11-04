@@ -47,7 +47,7 @@ export class ApiBaseService<T> {
   }
 
   public update(item: any): Observable<T> {
-    return this.http.put<T>(`${this.resourcePath()}`, JSON.stringify(item), this.httpOptions)
+    return this.http.put<T>(`${this.resourcePath()}`, item, this.httpOptions)
       .pipe(retry(2), catchError(this.handleError));
   }
 
