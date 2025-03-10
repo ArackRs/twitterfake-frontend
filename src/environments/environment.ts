@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://twitter-arackrs.azurewebsites.net/api/v1'
+  apiUrl: 'https://twitter-latest.onrender.com/api/v1'
 };
