@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://twitter-latest.onrender.com/api/v1'
+  apiUrl: 'https://zesty-shelagh-arackrs-3f4782f7.koyeb.app/api/v1'
 };
