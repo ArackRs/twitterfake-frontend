@@ -55,4 +55,9 @@ export class ApiBaseService<T> {
     return this.http.get<T[]>(`${this.resourcePath()}`, this.httpOptions)
       .pipe(retry(2), catchError(this.handleError));
   }
+
+  healthCheck(): Observable<string> {
+    return this.http.get(`${this.basePath}/health-check`, { responseType: 'text' })
+      .pipe(retry(2), catchError(this.handleError));
+  }
 }

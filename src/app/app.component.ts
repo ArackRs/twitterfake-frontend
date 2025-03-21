@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {RouterLink, RouterOutlet} from '@angular/router';
 import {FooterComponent} from "./components/footer/footer.component";
 import {Button} from "primeng/button";
@@ -11,6 +11,8 @@ import {DividerModule} from "primeng/divider";
 import {LandingComponent} from "./pages/landing/landing.component";
 import {NgIf} from "@angular/common";
 import {AuthService} from "./services/auth.service";
+import {ApiBaseService} from "./services/api-base.service";
+import {ProgressSpinnerModule} from "primeng/progressspinner";
 
 @Component({
   selector: 'app-root',
@@ -27,17 +29,35 @@ import {AuthService} from "./services/auth.service";
     DividerModule,
     RouterLink,
     LandingComponent,
-    NgIf
+    NgIf,
+    ProgressSpinnerModule,
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   title = 'EnlaceFrontend';
+  isSleeping: boolean = true;
 
   constructor(
-    private authService: AuthService,
+    private readonly apiBaseService: ApiBaseService<any>,
+    private readonly authService: AuthService
   ) {
+  }
+
+  ngOnInit(): void {
+
+    this.apiBaseService.healthCheck().subscribe({
+      next: (res) => {
+        console.log('Health check OK', res);
+      },
+      error: (error) => {
+        console.error('Health check failed', error);
+      }
+    });
+    setTimeout((): void => {
+      this.isSleeping = false;
+    }, 2000);
   }
 
   public get isLoggedIn(): boolean {
