@@ -61,7 +61,7 @@ export class AuthService extends ApiBaseService<Auth> {
   public handleSessionExpired(): void {
     this.clearCredentials();
     alert('Session has expired. You will be redirected to the login page.');
-    window.location.href = '/landing';
+    window.location.href = '/';
   }
   public getToken(): string | null {
     return localStorage.getItem('token');
