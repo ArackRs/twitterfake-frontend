@@ -2,18 +2,22 @@
   <div class="card w-20rem">
     <h1 class="text-6xl">Lo que está pasando ahora</h1>
     <h2>Únete Hoy</h2>
+    <asl-google-signin-button
+      text="continue_with" type='standard' size='large'>
+    </asl-google-signin-button>
+    <p-divider />
     <p-button
       routerLink="/register"
       label="Crear Cuenta"
-      severity="contrast"/>
-    <p-divider />
+      severity="contrast" />
+    <span class="block my-3"></span>
     <p-button
       routerLink="/login"
       label="Iniciar Sesion" />
     <p-divider />
     <p>¿Aun no tienes una Cuenta?</p>
     <p-button
-      label="Invitado"
+      label="Continue with Guest"
       (click)="createGuestAccount()"
       [outlined]="true" />
     <app-footer />

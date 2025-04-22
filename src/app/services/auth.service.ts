@@ -58,6 +58,17 @@ export class AuthService extends ApiBaseService<Auth> {
       );
   }
 
+  public signInWithGoogle(idToken: string): Observable<any> {
+    return this.http.post<any>(`${this.resourcePath()}/oauth2/success`, { idToken }, this.httpOptions)
+      .pipe(
+        tap(response => {
+          this.saveCredentials(response.token, response.username);
+        }),
+        retry(2),
+        catchError(this.handleError)
+      );
+  }
+
   public handleSessionExpired(): void {
     this.clearCredentials();
     alert('Session has expired. You will be redirected to the login page.');

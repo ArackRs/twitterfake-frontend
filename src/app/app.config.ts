@@ -12,6 +12,13 @@ import {UserService} from "./services/user.service";
 import {PostService} from "./services/post.service";
 import {FollowService} from "./services/follow.service";
 
+import {
+  SocialLoginModule,
+  SocialAuthService,
+  SocialAuthServiceConfig,
+  GoogleSigninButtonModule, GoogleLoginProvider
+} from '@abacritt/angularx-social-login';
+
 export const appConfig: ApplicationConfig = {
   providers: [
     provideZoneChangeDetection({ eventCoalescing: true }),
@@ -24,9 +31,29 @@ export const appConfig: ApplicationConfig = {
     UserService,
     PostService,
     FollowService,
+    SocialAuthService,
+    {
+      provide: 'SocialAuthServiceConfig',
+      useValue: {
+        autoLogin: false,
+        providers: [
+          {
+            id: GoogleLoginProvider.PROVIDER_ID,
+            provider: new GoogleLoginProvider(
+              '353060260533-ol23f81fr8pqo3a8ibjqprrv6kgpd4bf.apps.googleusercontent.com'
+            )
+          }
+        ],
+        onError: (err: any) => {
+          console.error('Error in social login:', err);
+        }
+      } as SocialAuthServiceConfig
+    },
     importProvidersFrom(
       BrowserAnimationsModule,
       ReactiveFormsModule,
+      SocialLoginModule,
+      GoogleSigninButtonModule
     )
   ]
 };
