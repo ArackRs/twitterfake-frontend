@@ -2,18 +2,30 @@
   <div class="card w-20rem">
     <h1 class="text-6xl">Lo que está pasando ahora</h1>
     <h2>Únete Hoy</h2>
+    <!-- Reemplaza TU_CLIENT_ID con el tuyo (ya lo tienes correcto) -->
+    <div
+      id="g_id_onload"
+      data-client_id="353060260533-ol23f81fr8pqo3a8ibjqprrv6kgpd4bf.apps.googleusercontent.com"
+      data-context="signin"
+      data-ux_mode="popup"
+      data-callback="handleCredentialResponse"
+      data-auto_select="true"
+      data-itp_support="true">
+    </div>
+    <div id="g_id_signin"></div>
+    <p-divider />
     <p-button
       routerLink="/register"
       label="Crear Cuenta"
-      severity="contrast"/>
-    <p-divider />
+      severity="contrast" />
+    <span class="block my-3"></span>
     <p-button
       routerLink="/login"
       label="Iniciar Sesion" />
     <p-divider />
     <p>¿Aun no tienes una Cuenta?</p>
     <p-button
-      label="Invitado"
+      label="Continue with Guest"
       (click)="createGuestAccount()"
       [outlined]="true" />
     <app-footer />

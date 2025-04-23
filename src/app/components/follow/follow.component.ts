@@ -7,7 +7,6 @@ import {NgForOf, NgIf} from "@angular/common";
 import {FollowService} from "../../services/follow.service";
 import {AvatarModule} from "primeng/avatar";
 import {FooterComponent} from "../footer/footer.component";
-import {AuthService} from "../../services/auth.service";
 import {NotificationService} from "../../services/notification.service";
 import {Router} from "@angular/router";
 
@@ -45,7 +44,6 @@ export class FollowComponent implements OnInit {
       next: (user) => {
         this.user = user;
         this.currentUserId = user.id;
-        console.log('Current user id:', this.currentUserId);
       },
       error: (err) => {
         console.error('Error fetching user:', err);
@@ -54,7 +52,6 @@ export class FollowComponent implements OnInit {
     this.loadUsers();
     this.notificationService.userFollow$.subscribe(() => {
       this.loadUsers();
-      console.log('User follow notification, LOAD USERS');
     });
   }
   public followUser(followedId: number): void {
@@ -63,7 +60,6 @@ export class FollowComponent implements OnInit {
       next: () => {
         this.loadingUsers[followedId] = false;
         this.loadUsers();
-        console.log('User follow notification, LOAD USERS2');
         this.notificationService.notifyFollow();
         this.notificationService.notifyPost();
       },
@@ -87,10 +83,8 @@ export class FollowComponent implements OnInit {
             this.users = allUsers.filter((user: any) => {
               const notFollowed = !followerIds.has(user.id);
               const notCurrentUser = user.id !== this.currentUserId; // Excluir el usuario actual
-              console.log('userId:', user.id, 'currentUserId:', this.currentUserId);
               return notFollowed && notCurrentUser;
             });
-            console.log('Users:', this.users);
           },
           error: (err) => {
             console.error('Error fetching following:', err);
