@@ -30,7 +30,8 @@ export class LandingComponent implements OnInit {
 
     google.accounts.id.initialize({
       client_id: '353060260533-ol23f81fr8pqo3a8ibjqprrv6kgpd4bf.apps.googleusercontent.com',
-      callback: (response: any) => this.handleCredentialResponse(response)
+      callback: this.handleCredentialResponse.bind(this),
+      auto_select: true,
     });
 
     google.accounts.id.renderButton(
@@ -45,7 +46,7 @@ export class LandingComponent implements OnInit {
       }
     );
 
-    google.accounts.id.prompt(); // para mostrar automáticamente la sugerencia de cuenta
+    google.accounts.id.prompt();
   }
 
   public createGuestAccount(): void {
