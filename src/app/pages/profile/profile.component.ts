@@ -7,7 +7,7 @@ import {TabViewModule} from "primeng/tabview";
 import {UserService} from "../../services/user.service";
 import {Button} from "primeng/button";
 import {AvatarModule} from "primeng/avatar";
-import {NgIf} from "@angular/common";
+import {NgIf, NgOptimizedImage} from "@angular/common";
 import {FollowingComponent} from "../../components/following/following.component";
 import {FollowersComponent} from "../../components/followers/followers.component";
 import {DialogModule} from "primeng/dialog";
@@ -17,6 +17,7 @@ import {PostListComponent} from "../../components/post-list/post-list.component"
 import {PostService} from "../../services/post.service";
 import {ProfileService} from "../../services/profile.service";
 import {ActivatedRoute} from "@angular/router";
+import {Profile} from "../../model/profile";
 
 @Component({
   selector: 'app-profile',
@@ -35,13 +36,14 @@ import {ActivatedRoute} from "@angular/router";
     DialogModule,
     FormsModule,
     InputTextModule,
-    PostListComponent
+    PostListComponent,
+    NgOptimizedImage
   ],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.css'
 })
 export class ProfileComponent implements OnInit {
-  profile: any = {};
+  profile!: Profile;
   allPosts: any[] = [];
   myPosts: any[] = [];
   following: any[] = [];
@@ -54,7 +56,8 @@ export class ProfileComponent implements OnInit {
     private readonly profileService: ProfileService,
     private readonly postService: PostService,
     private readonly route: ActivatedRoute
-  ) {  }
+  ) {
+  }
 
   public ngOnInit(): void {
     this.loadUserProfile();
@@ -94,7 +97,7 @@ export class ProfileComponent implements OnInit {
     this.route.paramMap.subscribe(params => {
       const username = params.get('username') ?? '';
       this.profileService.getProfileByUsername(username).subscribe({
-        next: (profile) => {
+        next: (profile: Profile): void => {
           this.profile = profile;
           this.loadAllPosts(profile.username);
         },
@@ -110,7 +113,6 @@ export class ProfileComponent implements OnInit {
       next: (response) => {
         this.allPosts = response;
         this.filterPosts();
-        console.log('Posts fetched successfully:', response);
       },
       error: (error) => {
         console.error('Error fetching posts:', error);

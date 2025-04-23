@@ -1,9 +1,9 @@
 <main class="flex w-full">
-  <section class=" w-full pt-6">
+  <section class="w-full pt-6">
     <div class="container">
       <div class="profile-header p-3">
         <div class="profile-avatar">
-          <img alt="Profile Avatar" src="https://via.placeholder.com/150" />
+          <img alt="Profile Avatar" [ngSrc]="profile.photoUrl" fill />
         </div>
         <div class="profile-info">
           <h1>{{ profile.fullName }}</h1>

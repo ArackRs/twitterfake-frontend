@@ -58,13 +58,13 @@ export class AuthService extends ApiBaseService<Auth> {
       );
   }
 
-  public signInWithGoogle(idToken: string): Observable<any> {
-    return this.http.post<any>(`${this.resourcePath()}/oauth2/success`, { idToken }, this.httpOptions)
+  public continueWithGoogle(idToken: any): Observable<Auth> {
+    return this.http.post<Auth>(`${this.resourcePath()}/google`, { idToken }, this.httpOptions)
       .pipe(
         tap(response => {
           this.saveCredentials(response.token, response.username);
         }),
-        retry(2),
+        retry(0),
         catchError(this.handleError)
       );
   }
