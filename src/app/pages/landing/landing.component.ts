@@ -31,20 +31,22 @@ export class LandingComponent implements OnInit {
     google.accounts.id.initialize({
       client_id: '353060260533-ol23f81fr8pqo3a8ibjqprrv6kgpd4bf.apps.googleusercontent.com',
       callback: this.handleCredentialResponse.bind(this),
-      auto_select: true,
+      // auto_select: true,
     });
 
-    google.accounts.id.renderButton(
-      document.getElementById("g_id_signin"),
-      {
+    const googleButton: HTMLElement = document.getElementById("g_id_signin") as HTMLElement;
+
+    if (googleButton) {
+      google.accounts.id.renderButton(googleButton, {
         theme: "outline",
         size: "large",
         shape: "rectangular",
         text: "continue_with",
         type: "standard",
-        logo_alignment: "left"
-      }
-    );
+        logo_alignment: "left",
+        width: googleButton.offsetWidth
+      });
+    }
 
     google.accounts.id.prompt();
   }
