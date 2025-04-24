@@ -24,14 +24,11 @@ export class LandingComponent implements OnInit {
   constructor(private readonly authService: AuthService, private readonly router: Router) {}
 
   ngOnInit(): void {
-    (window as any).handleCredentialResponse = (response: any) => {
-      this.handleCredentialResponse(response);
-    };
 
     google.accounts.id.initialize({
       client_id: '353060260533-ol23f81fr8pqo3a8ibjqprrv6kgpd4bf.apps.googleusercontent.com',
       callback: this.handleCredentialResponse.bind(this),
-      // auto_select: true,
+      auto_select: true,
     });
 
     const googleButton: HTMLElement = document.getElementById("g_id_signin") as HTMLElement;
@@ -44,7 +41,6 @@ export class LandingComponent implements OnInit {
         text: "continue_with",
         type: "standard",
         logo_alignment: "left",
-        width: googleButton.offsetWidth
       });
     }
 
