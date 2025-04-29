@@ -8,7 +8,7 @@ import {environment} from "../../environments/environment";
 })
 export class ApiBaseService<T> {
 
-  basePath: string = `${environment.apiUrl}`;
+  basePath: string = `${environment.apiUrl}/api/v1`;
   resourceEndpoint: string = '/resources';
 
   httpOptions: { headers: HttpHeaders } = {
@@ -56,8 +56,9 @@ export class ApiBaseService<T> {
       .pipe(retry(2), catchError(this.handleError));
   }
 
-  healthCheck(): Observable<string> {
-    return this.http.get(`${this.basePath}/health-check`, { responseType: 'text' })
+  healthCheck(): Observable<any> {
+    return this.http.get(`${environment.apiUrl}/actuator/health`)
       .pipe(retry(2), catchError(this.handleError));
   }
+
 }
