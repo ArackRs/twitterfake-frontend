@@ -4,6 +4,7 @@ import {DividerModule} from "primeng/divider";
 import {FooterComponent} from "../../components/footer/footer.component";
 import {Router, RouterLink} from "@angular/router";
 import {AuthService} from "../../services/auth.service";
+import {environment} from "../../../environments/environment";
 
 declare const google: any;
 
@@ -26,7 +27,7 @@ export class LandingComponent implements OnInit {
   ngOnInit(): void {
 
     google.accounts.id.initialize({
-      client_id: '353060260533-ol23f81fr8pqo3a8ibjqprrv6kgpd4bf.apps.googleusercontent.com',
+      client_id: environment.googleClientId,
       callback: this.handleCredentialResponse.bind(this),
       auto_select: true,
     });

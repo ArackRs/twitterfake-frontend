@@ -46,18 +46,17 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
     this.apiBaseService.healthCheck().subscribe({
       next: (res) => {
         console.log('Health check OK', res);
+        if (res?.status === 'UP') {
+          this.isSleeping = false;
+        }
       },
       error: (error) => {
         console.error('Health check failed', error);
       }
     });
-    setTimeout((): void => {
-      this.isSleeping = false;
-    }, 2000);
   }
 
   public get isLoggedIn(): boolean {
