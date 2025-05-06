@@ -26,26 +26,6 @@ export class LandingComponent implements OnInit {
 
   ngOnInit(): void {
 
-    google.accounts.id.initialize({
-      client_id: environment.googleClientId,
-      callback: this.handleCredentialResponse.bind(this),
-      auto_select: true,
-    });
-
-    const googleButton: HTMLElement = document.getElementById("g_id_signin") as HTMLElement;
-
-    if (googleButton) {
-      google.accounts.id.renderButton(googleButton, {
-        theme: "outline",
-        size: "large",
-        shape: "rectangular",
-        text: "continue_with",
-        type: "standard",
-        logo_alignment: "left",
-      });
-    }
-
-    google.accounts.id.prompt();
   }
 
   public createGuestAccount(): void {
@@ -61,15 +41,16 @@ export class LandingComponent implements OnInit {
     });
   }
 
-  handleCredentialResponse(response: any) {
-    const idToken = response.credential;
-    console.log('Google ID Token:', idToken);
+  redirectToGoogleAuth() {
+    const clientId = environment.googleClientId;
+    const redirectUri = environment.googleRedirectUri; // Ej: 'https://tuapp.com/google/callback'
+    const scope = 'openid email profile'; // Permisos que deseas solicitar
+    const responseType = 'code';
+    const state = 'opcional_un_valor_random';
 
-    this.authService.continueWithGoogle(idToken).subscribe({
-      next: () => {
-        this.router.navigate(['/home']);
-      },
-      error: err => console.error('Google login error:', err)
-    });
+    const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=${responseType}&scope=${scope}&state=${state}`;
+
+    window.location.href = authUrl;
   }
+
 }

@@ -9,9 +9,8 @@ import {PostListComponent} from "../../components/post-list/post-list.component"
 import {FollowService} from "../../services/follow.service";
 import {PostService} from "../../services/post.service";
 import {NotificationService} from "../../services/notification.service";
-import {User} from "../../model/user";
 import {NgIf} from "@angular/common";
-import {RouterOutlet} from "@angular/router";
+import { RouterOutlet} from "@angular/router";
 
 @Component({
   selector: 'app-home',
@@ -29,7 +28,7 @@ import {RouterOutlet} from "@angular/router";
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })
-export class HomeComponent implements OnInit{
+export class HomeComponent implements OnInit {
   allPosts: any[] = [];
   following: any[] = [];
   forYouPosts: any[] = [];
@@ -46,6 +45,7 @@ export class HomeComponent implements OnInit{
   ) {  }
 
   public ngOnInit(): void {
+
     this.loadCurrentUser();
     this.loadAllPosts();
     this.loadFollowing();
