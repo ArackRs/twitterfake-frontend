@@ -28,23 +28,9 @@ export class LandingComponent implements OnInit {
 
     google.accounts.id.initialize({
       client_id: environment.googleClientId,
-      callback: this.handleCredentialResponse.bind(this),
+      callback: this.redirectToGoogleAuth.bind(this),
       auto_select: true,
     });
-
-    const googleButton: HTMLElement = document.getElementById("g_id_signin") as HTMLElement;
-
-    if (googleButton) {
-      google.accounts.id.renderButton(googleButton, {
-        theme: "outline",
-        size: "large",
-        shape: "rectangular",
-        text: "continue_with",
-        type: "standard",
-        logo_alignment: "left",
-      });
-    }
-
     google.accounts.id.prompt();
   }
 
@@ -61,15 +47,21 @@ export class LandingComponent implements OnInit {
     });
   }
 
-  handleCredentialResponse(response: any) {
-    const idToken = response.credential;
-    console.log('Google ID Token:', idToken);
+  redirectToGoogleAuth() {
+    const { googleClientId, googleRedirectUri } = environment;
+    const scope = 'openid email profile';
+    const responseType = 'code';
 
-    this.authService.continueWithGoogle(idToken).subscribe({
-      next: () => {
-        this.router.navigate(['/home']);
-      },
-      error: err => console.error('Google login error:', err)
-    });
+    const state = crypto.randomUUID();
+    sessionStorage.setItem('oauth_state', state);
+
+    window.location.href = `https://accounts.google.com/o/oauth2/v2/auth`
+      + `?client_id=${googleClientId}`
+      + `&redirect_uri=${googleRedirectUri}`
+      + `&response_type=${responseType}`
+      + `&scope=${scope}`
+      + `&state=${state}`;
   }
+
+
 }

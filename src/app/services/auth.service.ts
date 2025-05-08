@@ -58,8 +58,8 @@ export class AuthService extends ApiBaseService<Auth> {
       );
   }
 
-  public continueWithGoogle(idToken: any): Observable<Auth> {
-    return this.http.post<Auth>(`${this.resourcePath()}/google`, { idToken }, this.httpOptions)
+  public continueWithGoogle(code: any): Observable<Auth> {
+    return this.http.post<Auth>(`${this.resourcePath()}/google/callback`, { code }, this.httpOptions)
       .pipe(
         tap(response => {
           this.saveCredentials(response.token, response.username);

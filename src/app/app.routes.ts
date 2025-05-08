@@ -1,10 +1,18 @@
 import { Routes } from '@angular/router';
-import {authGuard} from "./core/auth.guard";
+import {authGuard} from "./core/guards/auth.guard";
+import {authenticatedGuard} from "./core/guards/authenticated.guard";
 
 export const routes: Routes = [
+
   {
     path: '',
+    redirectTo: '/home',
+    pathMatch: 'full'
+  },
+  {
+    path: 'landing',
     loadComponent: () => import('./pages/landing/landing.component').then(m => m.LandingComponent),
+    canActivate: [authenticatedGuard]
   },
   {
     path: 'register',

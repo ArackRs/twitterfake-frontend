@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import {RouterLink, RouterOutlet} from '@angular/router';
 import {FooterComponent} from "./components/footer/footer.component";
 import {Button} from "primeng/button";
@@ -41,7 +41,8 @@ export class AppComponent implements OnInit {
 
   constructor(
     private readonly apiBaseService: ApiBaseService<any>,
-    private readonly authService: AuthService
+    private readonly authService: AuthService,
+    private readonly cdr: ChangeDetectorRef
   ) {
   }
 
@@ -51,6 +52,7 @@ export class AppComponent implements OnInit {
         console.log('Health check OK', res);
         if (res?.status === 'UP') {
           this.isSleeping = false;
+          this.cdr.detectChanges();
         }
       },
       error: (error) => {

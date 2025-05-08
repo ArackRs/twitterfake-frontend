@@ -39,16 +39,18 @@ export class FollowComponent implements OnInit {
   ) {}
 
   public ngOnInit(): void {
-    const username: string = this.userService.getUsername();
-    this.userService.getUserByUsername(username).subscribe({
+
+    this.userService.loadCurrentUser().subscribe({
       next: (user) => {
         this.user = user;
         this.currentUserId = user.id;
       },
       error: (err) => {
-        console.error('Error fetching user:', err);
+        console.error('Error fetching current user:', err);
       }
+
     });
+
     this.loadUsers();
     this.notificationService.userFollow$.subscribe(() => {
       this.loadUsers();
