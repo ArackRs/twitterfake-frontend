@@ -35,17 +35,27 @@ export class LoginComponent implements OnInit {
   }
 
   public ngOnInit(): void {
+    const params = new URLSearchParams(window.location.search);
+    const returnedState: string | null = params.get('state');
+    const expectedState: string | null = sessionStorage.getItem('oauth_state');
 
-    this.route.queryParams.subscribe(params => {
-      const token = params['token'];
-      console.log('Token de la URL:', token);
-      if (token) {
-        localStorage.setItem('token', token);
-        this.router.navigate(['/home'])
-          .then(r => console.log('Redirection a /home:', r));
-      }
-    });
+    if (returnedState && expectedState && returnedState !== expectedState) {
+      console.error('Invalid state');
+      this.router.navigate(['/landing'], {replaceUrl: true})
+        .then(r => console.log('Redirection a /landing:', r));
+      return;
+    }
+
+    const token: string | null = params.get('token');
+    if (token) {
+      localStorage.setItem('token', token);
+      this.router.navigate(['/home'], {replaceUrl: true})
+        .then(r => console.log('Redirection a /home:', r));
+    } else {
+      console.error('Token missing in URL');
+    }
   }
+
 
   public onSubmit(): void {
     if (this.loginForm.valid) {

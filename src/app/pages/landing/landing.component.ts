@@ -26,6 +26,12 @@ export class LandingComponent implements OnInit {
 
   ngOnInit(): void {
 
+    google.accounts.id.initialize({
+      client_id: environment.googleClientId,
+      callback: this.redirectToGoogleAuth.bind(this),
+      auto_select: true,
+    });
+    google.accounts.id.prompt();
   }
 
   public createGuestAccount(): void {
@@ -42,15 +48,20 @@ export class LandingComponent implements OnInit {
   }
 
   redirectToGoogleAuth() {
-    const clientId = environment.googleClientId;
-    const redirectUri = environment.googleRedirectUri; // Ej: 'https://tuapp.com/google/callback'
-    const scope = 'openid email profile'; // Permisos que deseas solicitar
+    const { googleClientId, googleRedirectUri } = environment;
+    const scope = 'openid email profile';
     const responseType = 'code';
-    const state = 'opcional_un_valor_random';
 
-    const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=${responseType}&scope=${scope}&state=${state}`;
+    const state = crypto.randomUUID();
+    sessionStorage.setItem('oauth_state', state);
 
-    window.location.href = authUrl;
+    window.location.href = `https://accounts.google.com/o/oauth2/v2/auth`
+      + `?client_id=${googleClientId}`
+      + `&redirect_uri=${googleRedirectUri}`
+      + `&response_type=${responseType}`
+      + `&scope=${scope}`
+      + `&state=${state}`;
   }
+
 
 }

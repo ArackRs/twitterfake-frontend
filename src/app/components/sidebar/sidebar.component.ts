@@ -40,7 +40,7 @@ export class SidebarComponent implements OnInit {
   public logout(): void {
     this.authService.signOut().subscribe({
       next: () => {
-        this.router.navigate(['/']).then(r => console.log('Logout successful, redirected to home.'));
+        this.router.navigate(['/landing']).then(r => console.log('Logout successful, redirected to home.'));
       },
       error: (error) => {
         console.error('Error during logout:', error);

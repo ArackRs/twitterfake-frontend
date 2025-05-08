@@ -59,6 +59,7 @@ export class HomeComponent implements OnInit {
     this.userService.loadCurrentUser().subscribe({
       next: (user) => {
         this.username = user.username;
+        localStorage.setItem('username', user.username);
         this.currentUserId = user.id;
       },
       error: (error) => {
