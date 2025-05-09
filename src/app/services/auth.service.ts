@@ -6,6 +6,7 @@ import {tap} from "rxjs/operators";
 import {Auth} from "../model/auth";
 import {SignIn} from "../model/sign-in";
 import {SignUp} from "../model/sign-up";
+import {environment} from "../../environments/environment";
 
 @Injectable({
   providedIn: 'root'
@@ -59,7 +60,7 @@ export class AuthService extends ApiBaseService<Auth> {
   }
 
   public continueWithGoogle(code: any): Observable<Auth> {
-    return this.http.post<Auth>(`${this.resourcePath()}/google/callback`, { code }, this.httpOptions)
+    return this.http.post<Auth>(`${environment.apiUrl}/oauth2/google/callback`, { code }, this.httpOptions)
       .pipe(
         tap(response => {
           this.saveCredentials(response.token, response.username);

@@ -49,7 +49,8 @@ export class LandingComponent implements OnInit {
 
   redirectToGoogleAuth(): void {
     const clientId: string= environment.googleClientId;
-    const redirectUri: string = environment.apiUrl + '/oauth2/google/callback';
+    const redirectUri: string = environment.frontendUrl + '/login';
+    console.log('Redirect URI:', redirectUri);
     const scope = 'openid email profile';
     const responseType = 'code';
 

@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
-import {ActivatedRoute, Router, RouterLink} from '@angular/router';
+import {Router, RouterLink} from '@angular/router';
 import {Button} from 'primeng/button';
 import {InputTextModule} from 'primeng/inputtext';
 import { AuthService } from "../../services/auth.service";
@@ -26,7 +26,6 @@ export class LoginComponent implements OnInit {
     private readonly authService: AuthService,
     private readonly formBuilder: FormBuilder,
     private readonly router: Router,
-    private readonly route: ActivatedRoute
   ) {
     this.loginForm = this.formBuilder.group({
       username: ['', Validators.required],
@@ -46,13 +45,20 @@ export class LoginComponent implements OnInit {
       return;
     }
 
-    const token: string | null = params.get('token');
-    if (token) {
-      localStorage.setItem('token', token);
-      this.router.navigate(['/home'], {replaceUrl: true})
-        .then(r => console.log('Redirection a /home:', r));
+    const code: string | null = params.get('code');
+    if (code) {
+      this.authService.continueWithGoogle(code).subscribe({
+        next: (response) => {
+          localStorage.setItem('token', response.token);
+          this.router.navigate(['/home'], {replaceUrl: true}).then(r => console.log('Redirection a /home:', r));
+        },
+        error: (err) => {
+          console.error('Error exchanging code:', err);
+          this.router.navigate(['/landing'], {replaceUrl: true}).then(r => console.log('Redirection a /landing:', r));
+        }
+      });
     } else {
-      console.error('Token missing in URL');
+      console.error('Code missing in URL');
     }
   }
 
