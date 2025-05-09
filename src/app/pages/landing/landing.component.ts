@@ -47,8 +47,9 @@ export class LandingComponent implements OnInit {
     });
   }
 
-  redirectToGoogleAuth() {
-    const { googleClientId, googleRedirectUri } = environment;
+  redirectToGoogleAuth(): void {
+    const clientId: string= environment.googleClientId;
+    const redirectUri: string = environment.apiUrl + '/oauth2/google/callback';
     const scope = 'openid email profile';
     const responseType = 'code';
 
@@ -56,12 +57,10 @@ export class LandingComponent implements OnInit {
     sessionStorage.setItem('oauth_state', state);
 
     window.location.href = `https://accounts.google.com/o/oauth2/v2/auth`
-      + `?client_id=${googleClientId}`
-      + `&redirect_uri=${googleRedirectUri}`
+      + `?client_id=${clientId}`
+      + `&redirect_uri=${redirectUri}`
       + `&response_type=${responseType}`
       + `&scope=${scope}`
       + `&state=${state}`;
   }
-
-
 }
