@@ -1,8 +1,0 @@
-[build]
-publish = "dist/twitterfake-frontend/browser"
-
-[[redirects]]
-from = "/*"
-to = "/index.html"
-status = 200
-force = true
