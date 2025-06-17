@@ -1,7 +1,5 @@
 @if (isSleeping) {
-  <div class="spinner">
-    <p-progressSpinner strokeWidth="8" fill="transparent" animationDuration=".5s" [style]="{ width: '50px', height: '50px' }" />
-  </div>
+  <app-loading />
 } @else {
   <div id="app" class="flex lg:gap-3">
     <app-sidebar *ngIf="isLoggedIn" />

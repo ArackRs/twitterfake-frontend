@@ -13,6 +13,7 @@ import {NgIf} from "@angular/common";
 import {AuthService} from "./services/auth.service";
 import {ApiBaseService} from "./services/api-base.service";
 import {ProgressSpinnerModule} from "primeng/progressspinner";
+import {LoadingComponent} from "./components/loading/loading.component";
 
 @Component({
   selector: 'app-root',
@@ -31,6 +32,7 @@ import {ProgressSpinnerModule} from "primeng/progressspinner";
     LandingComponent,
     NgIf,
     ProgressSpinnerModule,
+    LoadingComponent
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
