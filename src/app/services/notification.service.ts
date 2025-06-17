@@ -6,7 +6,7 @@ import {Subject} from "rxjs";
 })
 export class NotificationService {
   private readonly userFollowSource = new Subject<void>();
-  private userPostSource = new Subject<void>();
+  private readonly userPostSource = new Subject<void>();
 
   public userFollow$ = this.userFollowSource.asObservable();
   public userPost$ = this.userPostSource.asObservable();

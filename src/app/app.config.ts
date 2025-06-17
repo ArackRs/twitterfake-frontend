@@ -6,7 +6,7 @@ import { ApiBaseService } from "./services/api-base.service";
 import {provideHttpClient, withInterceptors} from "@angular/common/http";
 import { ReactiveFormsModule } from "@angular/forms";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
-import { authInterceptor } from "./core/auth.interceptor";
+import { authInterceptor } from "./interceptors/auth.interceptor";
 import {AuthService} from "./services/auth.service";
 import {UserService} from "./services/user.service";
 import {PostService} from "./services/post.service";

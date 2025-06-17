@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
-import {authGuard} from "./core/guards/auth.guard";
-import {authenticatedGuard} from "./core/guards/authenticated.guard";
+import {authGuard} from "./guards/auth.guard";
+import {authenticatedGuard} from "./guards/authenticated.guard";
+import {DefaultLayoutComponent} from "./layouts/default-layout/default-layout.component";
 
 export const routes: Routes = [
 
@@ -26,16 +27,25 @@ export const routes: Routes = [
     path: 'oauth2/callback',
     loadComponent: () => import('./pages/oauth2/oauth2.component').then(m => m.Oauth2Component),
   },
+  // --- INICIO: Rutas que usan el Layout por defecto ---
   {
-    path: 'home',
-    loadComponent: () => import('./pages/home/home.component').then(m => m.HomeComponent),
-    canActivate: [authGuard]
+    path: '',
+    component: DefaultLayoutComponent,
+    children: [
+      {
+        path: 'home',
+        loadComponent: () => import('./pages/home/home.component').then(m => m.HomeComponent),
+        canActivate: [authGuard]
+      },
+      {
+        path: 'profile/:username',
+        loadComponent: () => import('./pages/profile/profile.component').then(m => m.ProfileComponent),
+        canActivate: [authGuard]
+      },
+      // ... más rutas que usan este layout ...
+    ]
   },
-  {
-    path: 'profile/:username',
-    loadComponent: () => import('./pages/profile/profile.component').then(m => m.ProfileComponent),
-    canActivate: [authGuard]
-  },
+  // --- FIN: Rutas que usan el Layout por defecto ---
   {
     path: '**',
     loadComponent: () => import('./pages/not-found/not-found.component').then(m => m.NotFoundComponent)

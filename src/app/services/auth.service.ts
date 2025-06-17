@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ApiBaseService } from "./api-base.service";
 import { HttpClient } from "@angular/common/http";
-import { catchError, Observable, retry } from "rxjs";
+import {BehaviorSubject, catchError, Observable, retry} from "rxjs";
 import {tap} from "rxjs/operators";
 import {Auth} from "../model/auth";
 import {SignIn} from "../model/sign-in";
@@ -13,16 +13,41 @@ import {environment} from "../../environments/environment";
 })
 export class AuthService extends ApiBaseService<Auth> {
 
+  // AÑADIDO: BehaviorSubject para emitir el estado de autenticación de forma reactiva
+  private readonly _isLoggedIn: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(this.isAuthenticated());
+  public isLoggedIn$: Observable<boolean> = this._isLoggedIn.asObservable();
+
   constructor(http: HttpClient) {
     super(http);
     this.resourceEndpoint = '/auth';
+    // Opcional: Escuchar eventos de 'storage' para sincronizar entre pestañas
+    // Esto es útil si un usuario cierra sesión en una pestaña y quieres que se refleje en otras.
+    window.addEventListener('storage', this.onStorageChange.bind(this));
   }
+
+  // AÑADIDO: Método para manejar cambios en el localStorage
+  private onStorageChange(event: StorageEvent): void {
+    // Si la clave 'token' cambia o si se llama a localStorage.clear() (event.key es null)
+    if (event.key === 'token' || event.key === null) {
+      const newStatus: boolean = this.isAuthenticated();
+      // Solo emitir si el estado ha cambiado para evitar emisiones innecesarias
+      if (this._isLoggedIn.getValue() !== newStatus) {
+        this._isLoggedIn.next(newStatus);
+      }
+    }
+  }
+
+  // Opcional: Limpiar el listener al destruir el servicio (aunque para 'providedIn: root' no es estrictamente necesario ya que el servicio vive toda la app)
+  // ngOnDestroy() {
+  //   window.removeEventListener('storage', this.onStorageChange.bind(this));
+  // }
 
   public signUp(item: SignUp): Observable<Auth> {
     return this.http.post<Auth>(`${this.resourcePath()}/sign-up`, item, this.httpOptions)
       .pipe(
         tap(response => {
           this.saveCredentials(response.token, response.username);
+          this._isLoggedIn.next(true); // AÑADIDO: Notificar que el usuario está logueado
         }),
         retry(2),
         catchError(this.handleError)
@@ -33,6 +58,7 @@ export class AuthService extends ApiBaseService<Auth> {
       .pipe(
         tap(response => {
           this.saveCredentials(response.token, response.username);
+          this._isLoggedIn.next(true); // AÑADIDO: Notificar que el usuario está logueado
         }),
         retry(2),
         catchError(this.handleError)
@@ -43,6 +69,7 @@ export class AuthService extends ApiBaseService<Auth> {
       .pipe(
         tap(response => {
           this.saveCredentials(response.token, response.username);
+          this._isLoggedIn.next(true); // AÑADIDO: Notificar que el usuario está logueado
         }),
         retry(2),
         catchError(this.handleError)
@@ -53,6 +80,7 @@ export class AuthService extends ApiBaseService<Auth> {
       .pipe(
         tap(() => {
           this.clearCredentials();
+          this._isLoggedIn.next(false); // AÑADIDO: Notificar que el usuario no está logueado
         }),
         retry(2),
         catchError(this.handleError)
@@ -64,6 +92,7 @@ export class AuthService extends ApiBaseService<Auth> {
       .pipe(
         tap(response => {
           this.saveCredentials(response.token, response.username);
+          this._isLoggedIn.next(true); // AÑADIDO: Notificar que el usuario está logueado
         }),
         retry(0),
         catchError(this.handleError)
@@ -72,6 +101,7 @@ export class AuthService extends ApiBaseService<Auth> {
 
   public handleSessionExpired(): void {
     this.clearCredentials();
+    this._isLoggedIn.next(false); // AÑADIDO: Notificar que el usuario no está logueado
     alert('Session has expired. You will be redirected to the login page.');
     window.location.href = '/';
   }

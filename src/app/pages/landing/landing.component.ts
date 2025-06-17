@@ -29,7 +29,7 @@ export class LandingComponent implements OnInit {
     google.accounts.id.initialize({
       client_id: environment.googleClientId,
       callback: this.redirectToGoogleAuth.bind(this),
-      auto_select: true,
+      auto_select: false,
     });
     google.accounts.id.prompt();
   }
@@ -49,7 +49,7 @@ export class LandingComponent implements OnInit {
 
   redirectToGoogleAuth(): void {
     const clientId: string= environment.googleClientId;
-    const redirectUri: string = environment.frontendUrl + '/login';
+    const redirectUri: string = environment.frontendUrl + '/oauth2/callback';
     console.log('Redirect URI:', redirectUri);
     const scope = 'openid email profile';
     const responseType = 'code';

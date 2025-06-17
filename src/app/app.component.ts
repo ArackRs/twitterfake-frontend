@@ -14,6 +14,7 @@ import {AuthService} from "./services/auth.service";
 import {ApiBaseService} from "./services/api-base.service";
 import {ProgressSpinnerModule} from "primeng/progressspinner";
 import {LoadingComponent} from "./components/loading/loading.component";
+import {DefaultLayoutComponent} from "./layouts/default-layout/default-layout.component";
 
 @Component({
   selector: 'app-root',
@@ -32,7 +33,8 @@ import {LoadingComponent} from "./components/loading/loading.component";
     LandingComponent,
     NgIf,
     ProgressSpinnerModule,
-    LoadingComponent
+    LoadingComponent,
+    DefaultLayoutComponent
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
