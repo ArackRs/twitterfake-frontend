@@ -2,31 +2,28 @@ import {ApplicationConfig, importProvidersFrom, provideZoneChangeDetection} from
 import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
-import { ApiBaseService } from "./services/api-base.service";
 import {provideHttpClient, withInterceptors} from "@angular/common/http";
 import { ReactiveFormsModule } from "@angular/forms";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
-import { authInterceptor } from "./interceptors/auth.interceptor";
-import {AuthService} from "./services/auth.service";
-import {UserService} from "./services/user.service";
-import {PostService} from "./services/post.service";
-import {FollowService} from "./services/follow.service";
+import { authInterceptor } from "./core/interceptors/auth.interceptor";
+import {MessageService} from "primeng/api";
+import {loadingInterceptor} from "./core/interceptors/loading.interceptor";
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideZoneChangeDetection({ eventCoalescing: true }),
-    provideRouter(routes),
+    provideRouter(routes), // Asumiendo que 'routes' está importado de './app.routes'
     provideHttpClient(
-      withInterceptors([authInterceptor])
+      withInterceptors([
+        authInterceptor,
+        loadingInterceptor,
+        // errorInterceptor
+      ])
     ),
-    ApiBaseService,
-    AuthService,
-    UserService,
-    PostService,
-    FollowService,
+    MessageService,
     importProvidersFrom(
       BrowserAnimationsModule,
       ReactiveFormsModule,
-    )
+    ),
   ]
 };
